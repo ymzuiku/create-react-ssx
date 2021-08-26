@@ -1,13 +1,13 @@
 import { Suspense, ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
 
-interface ClientSuspenseProps {
+interface CSRSuspenseProps {
   ssr?: boolean;
   fallback: NonNullable<ReactNode> | null;
   children: ReactNode;
 }
 
-const CSRSuspense = ({ ssr, children, fallback }: ClientSuspenseProps) => {
+const CSRSuspense = ({ ssr, children, fallback }: CSRSuspenseProps) => {
   if (ssr) {
     return <>{children}</>;
   }
