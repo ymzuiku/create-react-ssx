@@ -1,32 +1,30 @@
+import { Suspense, ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
 
-// Auto generates routes from files under ./pages
-// https://vitejs.dev/guide/features.html#glob-import
-const pages = import.meta.globEager("./pages/**/*.tsx");
-
-function fixUrl(name: string): string {
-  const list = name.split("/");
-  if (list[list.length - 1] === "index") {
-    list.pop();
-  }
-  return "/" + list.join("/").toLocaleLowerCase();
+interface ClientSuspenseProps {
+  ssr?: boolean;
+  fallback: NonNullable<ReactNode> | null;
+  children: ReactNode;
 }
 
-const routes = Object.keys(pages).map((path) => {
-  const name = path.match(/\.\/pages\/(.*)\.tsx$/)![1];
-  return {
-    // name,
-    // path: name === "index" ? "/" : `/${name.toLowerCase()}`,
-    path: fixUrl(name),
-    Component: pages[path].default,
-  };
-});
+const CSRSuspense = ({ ssr, children, fallback }: ClientSuspenseProps) => {
+  if (ssr) {
+    return <>{children}</>;
+  }
+  return <Suspense fallback={fallback}>{children}</Suspense>;
+};
 
-export const urls = routes.map((v) => v.path);
+export interface AppProps {
+  ssr?: boolean;
+  routes: {
+    path: string;
+    Component: React.FC;
+  }[];
+}
 
-export function App() {
+export function App({ ssr, routes }: AppProps) {
   return (
-    <>
+    <CSRSuspense ssr={ssr} fallback={<div style={{ all: "unset" }}></div>}>
       <Switch>
         {routes.map(({ path, Component }) => {
           return (
@@ -36,6 +34,6 @@ export function App() {
           );
         })}
       </Switch>
-    </>
+    </CSRSuspense>
   );
 }
