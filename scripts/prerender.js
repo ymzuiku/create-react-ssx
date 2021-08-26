@@ -4,6 +4,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 const cwd = process.cwd();
+const { parseUrl } = require("./parseUrl");
 
 const toAbsolute = (p) => path.resolve(cwd, p);
 
@@ -16,6 +17,9 @@ function fixPagesRouter(dir) {
   fs.readdirSync(dir)
     .filter((v) => !/\.(css|json|md)/.test(v))
     .forEach((file, ...rest) => {
+      if (file[0] === "_") {
+        return;
+      }
       const subDir = path.resolve(dir, file);
       if (fs.statSync(subDir).isDirectory()) {
         fixPagesRouter(subDir);
@@ -34,22 +38,11 @@ routesToPrerender.forEach((v) => {
   fs.mkdirpSync(path.parse(real).dir);
 });
 
-function fixUrl(name) {
-  if (name === "/index") {
-    return "/";
-  }
-  const list = name.split("/");
-  if (list[list.length - 1] === "index") {
-    list.pop();
-  }
-  return list.join("/").toLocaleLowerCase();
-}
-
 async function ssg() {
   // pre-render each route...
   for (const url of routesToPrerender) {
     const context = {};
-    const appHtml = await render(fixUrl(url), context);
+    const appHtml = await render(parseUrl(url), context);
 
     const html = template.replace(`<!--app-html-->`, appHtml);
     const filePath = `dist${url}.html`;

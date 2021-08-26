@@ -1,3 +1,6 @@
 export default function User() {
-  return <div>the user</div>;
+  const handleClick = () => {
+    console.log("hello", new Map(), new Set(), new Promise((s) => s(void 0)));
+  };
+  return <div onClick={handleClick}>Hello User page</div>;
 }

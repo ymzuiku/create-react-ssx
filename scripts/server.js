@@ -4,17 +4,7 @@ const express = require("express");
 const cwd = process.cwd();
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const PORT = process.env.PORT || 3000;
-
-function fixUrl(name) {
-  if (name === "/index") {
-    return "/";
-  }
-  const list = name.split("/");
-  if (list[list.length - 1] === "index") {
-    list.pop();
-  }
-  return list.join("/").toLocaleLowerCase();
-}
+const { parseUrl } = require("./parseUrl");
 
 async function createServer(
   root = process.cwd(),
@@ -69,7 +59,7 @@ async function createServer(
       }
 
       const context = {};
-      const appHtml = render(fixUrl(url), context);
+      const appHtml = render(parseUrl(url), context);
 
       if (context.url) {
         // Somewhere a `<Redirect>` was rendered
