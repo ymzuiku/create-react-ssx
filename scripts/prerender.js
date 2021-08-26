@@ -3,11 +3,12 @@
 
 const fs = require("fs-extra");
 const path = require("path");
+const cwd = process.cwd();
 
-const toAbsolute = (p) => path.resolve(__dirname, p);
+const toAbsolute = (p) => path.resolve(cwd, p);
 
-const template = fs.readFileSync(toAbsolute("dist/static/index.html"), "utf-8");
-const { render } = require("./dist/server/entry-server.js");
+const template = fs.readFileSync(toAbsolute("dist/index.html"), "utf-8");
+const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
 
 // determine routes to pre-render from src/pages
 let routesToPrerender = [];
@@ -29,7 +30,7 @@ const basePath = toAbsolute("src/pages");
 fixPagesRouter(basePath);
 routesToPrerender = routesToPrerender.map((v) => v.replace(basePath, ""));
 routesToPrerender.forEach((v) => {
-  const real = path.resolve(__dirname, "dist/static", v.replace("/", ""));
+  const real = path.resolve(cwd, "dist", v.replace("/", ""));
   fs.mkdirpSync(path.parse(real).dir);
 });
 
@@ -41,7 +42,7 @@ async function ssg() {
 
     const html = template.replace(`<!--app-html-->`, appHtml);
 
-    const filePath = `dist/static${url}.html`;
+    const filePath = `dist${url}.html`;
 
     fs.writeFileSync(toAbsolute(filePath), html);
     console.log("pre-rendered:", filePath);

@@ -1,4 +1,4 @@
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -16,17 +16,6 @@ const routes = Object.keys(pages).map((path) => {
 export function App() {
   return (
     <>
-      <nav>
-        <ul>
-          {routes.map(({ name, path }) => {
-            return (
-              <li key={path}>
-                <Link to={path}>{name}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
       <Switch>
         {routes.map(({ path, Component }) => {
           return (

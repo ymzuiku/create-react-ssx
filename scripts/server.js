@@ -1,17 +1,18 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-
+const cwd = process.cwd();
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
+const PORT = process.env.PORT || 3000;
 
 async function createServer(
   root = process.cwd(),
   isProd = process.env.NODE_ENV === "production"
 ) {
-  const resolve = (p) => path.resolve(__dirname, p);
+  const resolve = (...args) => path.resolve(cwd, ...args);
 
   const indexProd = isProd
-    ? fs.readFileSync(resolve("dist/client/index.html"), "utf-8")
+    ? fs.readFileSync(resolve("dist/index.html"), "utf-8")
     : "";
 
   const app = express();
@@ -38,11 +39,7 @@ async function createServer(
     app.use(vite.middlewares);
   } else {
     app.use(require("compression")());
-    app.use(
-      require("serve-static")(resolve("dist/client"), {
-        index: false,
-      })
-    );
+    app.use(require("serve-static")(resolve("dist"), { index: false }));
   }
 
   app.use("*", async (req, res) => {
@@ -57,7 +54,7 @@ async function createServer(
         render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
       } else {
         template = indexProd;
-        render = require("./dist/server/entry-server.js").render;
+        render = require(resolve("node_modules/.ssr/entry-server.js")).render;
       }
 
       const context = {};
@@ -83,8 +80,8 @@ async function createServer(
 
 if (!isTest) {
   createServer().then(({ app }) =>
-    app.listen(3000, () => {
-      console.log("http://localhost:3000");
+    app.listen(PORT, () => {
+      console.log(`http://localhost:${PORT}`);
     })
   );
 }

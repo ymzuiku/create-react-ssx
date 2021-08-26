@@ -2,12 +2,9 @@
   "name": "react-vite-base",
   "version": "0.0.0",
   "scripts": {
-    "dev2": "vite",
-    "dev": "node server.js",
-    "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "build": "vite build --outDir dist/static && yarn build:server && node prerender",
-    "serve": "cross-env NODE_ENV=production node server.js"
+    "dev": "node scripts/server",
+    "build": "vite build --outDir dist && vite build --ssr src/entry-server.tsx --outDir node_modules/.ssr && node scripts/prerender",
+    "serve": "cross-env NODE_ENV=production node scripts/server"
   },
   "dependencies": {
     "compression": "^1.7.4",
