@@ -1,3 +1,4 @@
+import "./assets/tailwind-jit.css";
 import { hydrate } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";

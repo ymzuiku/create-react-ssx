@@ -5,6 +5,17 @@ const cwd = process.cwd();
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const PORT = process.env.PORT || 3000;
 
+function fixUrl(name) {
+  if (name === "/index") {
+    return "/";
+  }
+  const list = name.split("/");
+  if (list[list.length - 1] === "index") {
+    list.pop();
+  }
+  return list.join("/").toLocaleLowerCase();
+}
+
 async function createServer(
   root = process.cwd(),
   isProd = process.env.NODE_ENV === "production"
@@ -58,7 +69,7 @@ async function createServer(
       }
 
       const context = {};
-      const appHtml = render(url, context);
+      const appHtml = render(fixUrl(url), context);
 
       if (context.url) {
         // Somewhere a `<Redirect>` was rendered

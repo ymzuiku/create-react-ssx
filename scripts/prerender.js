@@ -34,14 +34,24 @@ routesToPrerender.forEach((v) => {
   fs.mkdirpSync(path.parse(real).dir);
 });
 
+function fixUrl(name) {
+  if (name === "/index") {
+    return "/";
+  }
+  const list = name.split("/");
+  if (list[list.length - 1] === "index") {
+    list.pop();
+  }
+  return list.join("/").toLocaleLowerCase();
+}
+
 async function ssg() {
   // pre-render each route...
   for (const url of routesToPrerender) {
     const context = {};
-    const appHtml = await render(url, context);
+    const appHtml = await render(fixUrl(url), context);
 
     const html = template.replace(`<!--app-html-->`, appHtml);
-
     const filePath = `dist${url}.html`;
 
     fs.writeFileSync(toAbsolute(filePath), html);
