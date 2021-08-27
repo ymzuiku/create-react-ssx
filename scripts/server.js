@@ -5,6 +5,7 @@ const cwd = process.cwd();
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const PORT = process.env.PORT || 3000;
 const { parseUrl } = require("./parseUrl");
+const distPath = "dist/static";
 
 async function createServer(
   root = process.cwd(),
@@ -13,7 +14,7 @@ async function createServer(
   const resolve = (...args) => path.resolve(cwd, ...args);
 
   const indexProd = isProd
-    ? fs.readFileSync(resolve("dist/index.html"), "utf-8")
+    ? fs.readFileSync(resolve(distPath + "/index.html"), "utf-8")
     : "";
 
   const app = fastify({});
@@ -44,7 +45,7 @@ async function createServer(
     // app.use(require("compression")());
     app.register(require("fastify-compress"), { global: false });
     app.register(require("fastify-static"), {
-      root: resolve("dist"),
+      root: resolve(distPath),
       prefix: "/",
     });
   }

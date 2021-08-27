@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "node scripts/server",
-    "build": "vite build --outDir dist && vite build --ssr src/entry-server.tsx --outDir node_modules/.ssr && node scripts/prerender",
+    "build": "vite build --outDir dist/static && vite build --ssr src/entry-server.tsx --outDir node_modules/.ssr && node scripts/prerender",
     "serve": "cross-env NODE_ENV=production node scripts/server"
   },
   "dependencies": {
