@@ -15,9 +15,12 @@
 
 ## Scripts
 
-- num run dev : 启动开发模式
-- num run build : 编译 SSG
-- num run server : 启动服务
+安装依赖请使用 [pnpm](https://pnpm.js.org/)
+
+- pnpm i : 安装依赖
+- npm run dev : 启动开发模式
+- npm run build : 编译 SSG
+- npm run server : 启动服务
 
 ## FQA
 
