@@ -4,6 +4,7 @@
 dist
 build
 coverage
+.eslintcache
 
 node_modules
 **/node_modules
