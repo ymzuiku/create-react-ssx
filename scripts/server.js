@@ -7,15 +7,10 @@ const PORT = process.env.PORT || 3000;
 const { parseUrl } = require("./parseUrl");
 const distPath = "dist/static";
 
-async function createServer(
-  root = process.cwd(),
-  isProd = process.env.NODE_ENV === "production"
-) {
+async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV === "production") {
   const resolve = (...args) => path.resolve(cwd, ...args);
 
-  const indexProd = isProd
-    ? fs.readFileSync(resolve(distPath + "/index.html"), "utf-8")
-    : "";
+  const indexProd = isProd ? fs.readFileSync(resolve(distPath + "/index.html"), "utf-8") : "";
 
   const app = fastify({});
   await app.register(require("middie"));
@@ -42,10 +37,13 @@ async function createServer(
     app.use(vite.middlewares);
   } else {
     app.register(require("fastify-compress"), { global: false });
-    app.register(require("fastify-static"), {
-      root: resolve(distPath),
-      prefix: "/",
-    });
+    const staticPath = resolve(distPath);
+    if (fs.existsSync(staticPath)) {
+      app.register(require("fastify-static"), {
+        root: resolve(distPath),
+        prefix: "/",
+      });
+    }
   }
 
   app.get("*", async (req, res) => {
