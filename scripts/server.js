@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const express = require("express");
+const fastify = require("fastify").default;
 const cwd = process.cwd();
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const PORT = process.env.PORT || 3000;
@@ -16,7 +16,8 @@ async function createServer(
     ? fs.readFileSync(resolve("dist/index.html"), "utf-8")
     : "";
 
-  const app = express();
+  const app = fastify({});
+  await app.register(require("middie"));
 
   /**
    * @type {import('vite').ViteDevServer}
@@ -37,15 +38,20 @@ async function createServer(
       },
     });
     // use vite's connect instance as middleware
+    // app.use(vite.middlewares);
     app.use(vite.middlewares);
   } else {
-    app.use(require("compression")());
-    app.use(require("serve-static")(resolve("dist"), { index: false }));
+    // app.use(require("compression")());
+    app.register(require("fastify-compress"), { global: false });
+    app.register(require("fastify-static"), {
+      root: resolve("dist"),
+      prefix: "/",
+    });
   }
 
-  app.use("*", async (req, res) => {
+  app.get("*", async (req, res) => {
     try {
-      const url = req.originalUrl;
+      const url = req.url;
 
       let template, render;
       if (!isProd) {
@@ -68,11 +74,13 @@ async function createServer(
 
       const html = template.replace(`<!--app-html-->`, appHtml);
 
-      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+      // res.status(200).set({ "Content-Type": "text/html" }).end(html);
+      res.status(200).headers({ "Content-Type": "text/html" }).send(html);
     } catch (e) {
       !isProd && vite.ssrFixStacktrace(e);
       console.log(e.stack);
-      res.status(500).end(e.stack);
+      // res.status(500).end(e.stack);
+      res.status(500).send(e.stack);
     }
   });
 
@@ -80,11 +88,18 @@ async function createServer(
 }
 
 if (!isTest) {
-  createServer().then(({ app }) =>
-    app.listen(PORT, () => {
+  createServer().then(({ app }) => {
+    const start = async () => {
       console.log(`http://localhost:${PORT}`);
-    })
-  );
+      try {
+        await app.listen(PORT);
+      } catch (err) {
+        app.log.error(err);
+        process.exit(1);
+      }
+    };
+    start();
+  });
 }
 
 // for test use
