@@ -39,10 +39,8 @@ async function createServer(
       },
     });
     // use vite's connect instance as middleware
-    // app.use(vite.middlewares);
     app.use(vite.middlewares);
   } else {
-    // app.use(require("compression")());
     app.register(require("fastify-compress"), { global: false });
     app.register(require("fastify-static"), {
       root: resolve(distPath),

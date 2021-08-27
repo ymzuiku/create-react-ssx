@@ -9,8 +9,8 @@ const isProd = process.env.NODE_ENV === "production";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    reactJsx(),
     reactRefresh(),
+    reactJsx(),
     isProd && legacy({ targets: ["defaults", "not IE 11"] }),
     isProd &&
       viteImagemin({
