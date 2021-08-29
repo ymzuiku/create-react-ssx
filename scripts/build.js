@@ -17,9 +17,9 @@ const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const isDev = conf.dev || process.env.NODE_ENV === "dev";
 const cwd = process.cwd();
 
-const useConfig = (entry, outDir, isWatch) => {
+const useConfig = ({ entry, outDir, isWatch, configFile = false } = {}) => {
   return Vite.defineConfig({
-    configFile: false,
+    configFile,
     root: cwd,
     logLevel: isTest ? "error" : "info",
     build: {
@@ -43,21 +43,27 @@ const useConfig = (entry, outDir, isWatch) => {
 };
 
 async function start() {
-  await Vite.build(useConfig("scripts/prerender.ts", "dist/prerender"));
-  await Vite.build(useConfig("src/entry-server.tsx", "dist/entry-server"));
-  await Vite.build(useConfig(isDev ? "scripts/server-dev.ts" : "scripts/server.ts", "dist/server", isDev));
+  await Vite.build(useConfig({ entry: "scripts/prerender.ts", outDir: "dist/prerender" }));
+  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server" }));
+  await Vite.build(
+    useConfig({
+      entry: isDev ? "scripts/server-dev.ts" : "scripts/server.ts",
+      outDir: "dist/server-dev",
+      isWatch: isDev,
+      configFile: void 0,
+    }),
+  );
   if (isDev) {
-    setTimeout(() => {
-      const devPath = Cwd("dist/build/server-dev.js");
-      if (!fs.existsSync(devPath)) {
-        throw "未找到 server-dev.js";
-      }
-      // require(Cwd("dist/build/server-dev.js"));
+    const devPath = Cwd("dist/server-dev/server-dev.js");
+    if (!fs.existsSync(devPath)) {
+      throw "未找到 server-dev.js";
+    }
+    // require(Cwd("dist/build/server-dev.js"));
 
-      const ls = child_process.spawn("npx", ["node", devPath], {
-        stdio: "inherit",
-      });
-    }, 500);
+    const ls = child_process.spawn("npx", ["node", devPath], {
+      stdio: "inherit",
+      env: process.env,
+    });
   }
 }
 

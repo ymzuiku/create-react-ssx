@@ -1,5 +1,5 @@
 export function parseURL(name: string) {
-  if (name === "/index") {
+  if (name === "/index" || name === "/") {
     return "/";
   }
   name = name.match(/\.\/pages\/(.*)\.tsx$/)![1];
@@ -14,7 +14,7 @@ export function parseURL(name: string) {
 export function parsePages(data: any) {
   return Object.keys(data)
     .filter((v) => {
-      if (!/(\.tsx|\.ts)$/.test(v)) {
+      if (!/\.tsx$/.test(v)) {
         return false;
       }
       if (/(\.test|_test|\.spec|_spce)/.test(v)) {

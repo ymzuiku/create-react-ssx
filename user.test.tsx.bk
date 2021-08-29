@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import User from "./user";
+import User from "./src/pages/user";
 
 test("renders learn react link", () => {
   render(<User />);

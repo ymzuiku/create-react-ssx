@@ -42,6 +42,7 @@ async function createServer() {
       template = fs.readFileSync(Cwd("index.html"), "utf-8");
       template = await vite.transformIndexHtml(url, template);
       const context: { url?: string } = {};
+      console.log(url);
       const appHtml = render(parseURL(url), context);
 
       if (context.url) {
