@@ -1,21 +1,21 @@
 // Pre-render the app into static HTML.
 // run `yarn generate` and then `dist/static` can be served as a static site.
-
-const fs = require("fs-extra");
-const path = require("path");
-const cwd = process.cwd();
-const { parseUrl } = require("./parseUrl");
-const toAbsolute = (p) => path.resolve(cwd, p);
-const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
+import fs from "fs-extra";
+import path from "path";
+import { parseURL } from "./parser";
+import { render } from "../src/entry-server";
+// const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
+const toAbsolute = (p: string) => path.resolve(cwd, p);
 const distPath = "dist/static";
 const template = fs.readFileSync(toAbsolute(distPath + "/index.html"), "utf-8");
+const cwd = process.cwd();
 
 // determine routes to pre-render from src/pages
 let routesToPrerender = [];
-function fixPagesRouter(dir) {
+function fixPagesRouter(dir: string) {
   fs.readdirSync(dir)
     .filter((v) => !/\.(css|json|md)/.test(v))
-    .forEach((file, ...rest) => {
+    .forEach((file) => {
       if (file[0] === "_") {
         return;
       }
@@ -41,7 +41,7 @@ async function ssg() {
   // pre-render each route...
   for (const url of routesToPrerender) {
     const context = {};
-    const appHtml = await render(parseUrl(url), context);
+    const appHtml = await render(parseURL(url), context);
 
     const html = template.replace(`<!--app-html-->`, appHtml);
     const filePath = `${distPath}${url}.html`;

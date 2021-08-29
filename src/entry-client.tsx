@@ -3,7 +3,7 @@ import { hydrate } from "react-dom";
 import { lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
-import { parsePages } from "../scripts/parsePages";
+import { parsePages } from "../scripts/parser";
 
 const pages = import.meta.glob("./pages/**/*.tsx");
 
@@ -18,5 +18,5 @@ hydrate(
   <BrowserRouter>
     <App routes={routes} />
   </BrowserRouter>,
-  document.getElementById("app")
+  document.getElementById("app"),
 );

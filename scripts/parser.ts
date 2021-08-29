@@ -1,4 +1,7 @@
-function fixPath(name: string) {
+export function parseURL(name: string) {
+  if (name === "/index") {
+    return "/";
+  }
   name = name.match(/\.\/pages\/(.*)\.tsx$/)![1];
   const list = name.split("/");
   if (list.length && list[list.length - 1] === "index") {
@@ -11,6 +14,12 @@ function fixPath(name: string) {
 export function parsePages(data: any) {
   return Object.keys(data)
     .filter((v) => {
+      if (!/(\.tsx|\.ts)$/.test(v)) {
+        return false;
+      }
+      if (/(\.test|_test|\.spec|_spce)/.test(v)) {
+        return false;
+      }
       if (v.split("/").find((v) => v[0] === "_")) {
         return false;
       }
@@ -18,7 +27,7 @@ export function parsePages(data: any) {
     })
     .map((v) => {
       return {
-        path: "/" + fixPath(v),
+        path: "/" + parseURL(v),
         key: v,
       };
     });

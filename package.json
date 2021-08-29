@@ -2,9 +2,9 @@
   "name": "react-vite-base",
   "version": "0.0.0",
   "scripts": {
-    "dev": "node scripts/server",
-    "build": "vite build --outDir dist/static && vite build --ssr src/entry-server.tsx --outDir node_modules/.ssr && node scripts/prerender",
-    "serve": "cross-env NODE_ENV=production node scripts/server",
+    "dev": "node scripts/build.js --dev",
+    "build": "node scripts/build.js && node dist/build/ssg",
+    "ssr": "node scripts/ssr",
     "test": "jest --watch",
     "prepare": "husky install"
   },
@@ -50,7 +50,8 @@
     "typescript": "^4.3.5",
     "vite": "^2.4.4",
     "vite-plugin-imagemin": "^0.4.5",
-    "vite-react-jsx": "^1.1.2"
+    "vite-react-jsx": "^1.1.2",
+    "yargs": "^17.1.1"
   },
   "prettier": {
     "trailingComma": "all",

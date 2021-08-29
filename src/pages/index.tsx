@@ -6,9 +6,7 @@ export default function Index() {
       <div className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-            <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
-              Template
-            </h2>
+            <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">Template</h2>
             <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               Base React SSG/SSR in Vite
             </p>
@@ -29,8 +27,7 @@ export default function Index() {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        aria-hidden="true"
-                      >
+                        aria-hidden="true">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -40,13 +37,9 @@ export default function Index() {
                       </svg>
                     </div>
                   </Link>
-                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                    支持 SSR/SSG
-                  </p>
+                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">支持 SSR/SSG</p>
                 </dt>
-                <dd className="mt-2 ml-16 text-base text-gray-500">
-                  一个非常基础的SSR配置，新项目从这里开始非常合适
-                </dd>
+                <dd className="mt-2 ml-16 text-base text-gray-500">一个非常基础的SSR配置，新项目从这里开始非常合适</dd>
               </div>
 
               <div className="relative">
@@ -59,8 +52,7 @@ export default function Index() {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        aria-hidden="true"
-                      >
+                        aria-hidden="true">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -70,13 +62,10 @@ export default function Index() {
                       </svg>
                     </div>
                   </Link>
-                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                    雷同 Next 的约定路由
-                  </p>
+                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">雷同 Next 的约定路由</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
-                  src/pages 下所有 *.tsx 文件均为页面组件, 文件名为 `_`
-                  开头的除外
+                  src/pages 下所有 *.tsx 文件均为页面组件, 文件名为 `_` 开头的除外
                 </dd>
               </div>
 
@@ -89,8 +78,7 @@ export default function Index() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true"
-                    >
+                      aria-hidden="true">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -99,13 +87,10 @@ export default function Index() {
                       />
                     </svg>
                   </div>
-                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                    自动懒加载
-                  </p>
+                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">自动懒加载</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
-                  所有路由在SSR/SSG的同时，还配置了懒加载。并且完全使用
-                  React-Route-DOM, 你不需要学习新的API
+                  所有路由在SSR/SSG的同时，还配置了懒加载。并且完全使用 React-Route-DOM, 你不需要学习新的API
                 </dd>
               </div>
 
@@ -118,8 +103,7 @@ export default function Index() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true"
-                    >
+                      aria-hidden="true">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -128,9 +112,7 @@ export default function Index() {
                       />
                     </svg>
                   </div>
-                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                    其他细节 Tailwind-jit
-                  </p>
+                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">其他细节 Tailwind-jit</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
                   默认已为你配置好 Tailwind-jit, ESLint, Prettier, 图片压缩99

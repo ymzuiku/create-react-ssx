@@ -1,27 +1,30 @@
-const fs = require("fs");
-const path = require("path");
-const fastify = require("fastify").default;
-const cwd = process.cwd();
+import fs from "fs";
+import path from "path";
+import { fastify } from "fastify";
+import { parseURL } from "./parser";
+import Middle from "middie";
+import Compress from "fastify-compress";
+import Static from "fastify-static";
+
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const PORT = process.env.PORT || 3000;
-const { parseUrl } = require("./parseUrl");
 const distPath = "dist/static";
 
-async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV === "production") {
-  const resolve = (...args) => path.resolve(cwd, ...args);
+const Cwd = (...args: string[]) => path.resolve(process.cwd(), ...args);
+const isProd = process.env.NODE_ENV !== "dev";
 
-  const indexProd = isProd ? fs.readFileSync(resolve(distPath + "/index.html"), "utf-8") : "";
-
+async function createServer() {
   const app = fastify({});
-  await app.register(require("middie"));
+  await app.register(Middle);
 
   /**
    * @type {import('vite').ViteDevServer}
    */
   let vite;
   if (!isProd) {
-    vite = await require("vite").createServer({
-      root,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vite = (require as any)("vite").createServer({
+      root: process.cwd(),
       logLevel: isTest ? "error" : "info",
       server: {
         middlewareMode: "ssr",
@@ -36,33 +39,34 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
     // use vite's connect instance as middleware
     app.use(vite.middlewares);
   } else {
-    app.register(require("fastify-compress"), { global: false });
-    const staticPath = resolve(distPath);
-    if (fs.existsSync(staticPath)) {
-      app.register(require("fastify-static"), {
-        root: resolve(distPath),
-        prefix: "/",
-      });
-    }
+    app.register(Compress, { global: false });
+    const staticPath = Cwd(distPath);
+    // if (fs.existsSync(staticPath)) {
+    // }
+    app.register(Static, {
+      root: staticPath,
+      prefix: "/",
+    });
   }
 
+  const indexProd = isProd ? fs.readFileSync(Cwd(distPath + "/index.html"), "utf-8") : "";
   app.get("*", async (req, res) => {
     try {
       const url = req.url;
 
-      let template, render;
+      let template: string;
+      const { render } = await import("../src/entry-server");
       if (!isProd) {
         // always read fresh template in dev
-        template = fs.readFileSync(resolve("index.html"), "utf-8");
+        template = fs.readFileSync(Cwd("index.html"), "utf-8");
         template = await vite.transformIndexHtml(url, template);
-        render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
+        // render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
       } else {
         template = indexProd;
-        render = require(resolve("node_modules/.ssr/entry-server.js")).render;
       }
 
-      const context = {};
-      const appHtml = render(parseUrl(url), context);
+      const context: { url?: string } = {};
+      const appHtml = render(parseURL(url), context);
 
       if (context.url) {
         // Somewhere a `<Redirect>` was rendered
