@@ -44,7 +44,7 @@ const useConfig = ({ entry, outDir, isWatch, configFile } = {}) => {
 
 async function start() {
   await Vite.build(useConfig({ entry: "scripts/prerender.ts", outDir: "dist/prerender" }));
-  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server", configFile: false }));
+  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server" }));
   await Vite.build(
     useConfig({
       entry: isDev ? "scripts/server-dev.ts" : "scripts/server.ts",

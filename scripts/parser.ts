@@ -2,7 +2,9 @@ export function parseURL(name: string) {
   if (name === "/index" || name === "/") {
     return "/";
   }
-  name = name.match(/\.\/pages\/(.*)\.tsx$/)![1];
+  if (/\.tsx/.test(name)) {
+    name = name.match(/\.\/pages\/(.*)\.tsx$/)![1];
+  }
   const list = name.split("/");
   if (list.length && list[list.length - 1] === "index") {
     list.pop();
