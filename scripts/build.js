@@ -1,69 +1,97 @@
-const yargs = require("yargs");
-const { hideBin } = require("yargs/helpers");
 const Vite = require("vite");
 const path = require("path");
-const fs = require("fs-extra");
+
 const child_process = require("child_process");
-const conf = yargs(hideBin(process.argv))
-  .option("dev", {
-    type: "boolean",
-    description: "Watch on dev",
-  })
-  .parseSync();
-
 const Cwd = (...args) => path.resolve(process.cwd(), ...args);
-
-const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-const isDev = conf.dev || process.env.NODE_ENV === "dev";
+const isProd = process.env.NODE_ENV === "production";
+const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
+const buildPath = Cwd("dist/server/index.js");
 
-const useConfig = ({ entry, outDir, isWatch, configFile } = {}) => {
-  return Vite.defineConfig({
-    configFile,
+const configs = {
+  server: Vite.defineConfig({
+    configFile: false,
     root: cwd,
-    logLevel: isTest ? "error" : "info",
+    mode,
+    logLevel: "info",
+    define: process.env,
     build: {
       ssr: true,
       sourcemap: true,
       minify: false,
       target: "es6",
       lib: {
-        name: entry,
+        name: "server",
         formats: ["cjs"],
-        entry,
+        entry: "server/index.ts",
       },
-      outDir,
-      watch: isWatch
-        ? {
+      outDir: "dist/server",
+      emptyOutDir: true,
+      watch: isProd
+        ? void 0
+        : {
+            buildDelay: 50,
             clearScreen: false,
-          }
-        : void 0,
+          },
     },
-  });
+  }),
+  prerender: Vite.defineConfig({
+    root: cwd,
+    mode,
+    define: {},
+    logLevel: "info",
+    build: {
+      ssr: true,
+      sourcemap: true,
+      minify: false,
+      target: "es6",
+      lib: {
+        name: "prerender",
+        formats: ["cjs"],
+        entry: "scripts/prerender.ts",
+      },
+      outDir: "dist/prerender",
+      emptyOutDir: false,
+    },
+  }),
+  static: Vite.defineConfig({
+    root: cwd,
+    mode,
+    define: process.env,
+    logLevel: "info",
+    build: {
+      outDir: "dist/static",
+    },
+  }),
 };
 
-async function start() {
-  await Vite.build(useConfig({ entry: "scripts/prerender.ts", outDir: "dist/prerender" }));
-  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server" }));
-  await Vite.build(
-    useConfig({
-      entry: isDev ? "scripts/server-dev.ts" : "scripts/server.ts",
-      outDir: "dist/server-dev",
-      isWatch: isDev,
-      configFile: false,
-    }),
-  );
-  if (isDev) {
-    const devPath = Cwd("dist/server-dev/server-dev.js");
-    if (!fs.existsSync(devPath)) {
-      throw "未找到 server-dev.js";
-    }
-    // require(Cwd("dist/build/server-dev.js"));
+let child;
+function onBoundleEnd() {
+  if (child) {
+    child.kill(0);
+    child = null;
+  }
+  child = child_process.spawn("node", [buildPath], {
+    stdio: "inherit",
+    env: process.env,
+  });
+}
 
-    const ls = child_process.spawn("npx", ["node", devPath], {
-      stdio: "inherit",
-      env: process.env,
+async function start() {
+  const watcher = await Vite.build(configs.server);
+
+  if (!isProd) {
+    watcher.on("event", (event) => {
+      if (event.code === "BUNDLE_END") {
+        onBoundleEnd();
+      }
     });
+  }
+
+  if (isProd) {
+    await Vite.build(configs.static);
+    await Vite.build(configs.prerender);
+    require(Cwd("dist/prerender/prerender.js"));
   }
 }
 

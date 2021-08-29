@@ -1,23 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import fs from "fs";
+import type { FastifyInstance } from "fastify";
 import path from "path";
-import { fastify } from "fastify";
+import fs from "fs";
 import { parseURL } from "./parser";
-import Middle from "middie";
 
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-const isProd = process.env.NODE_ENV !== "dev";
-const PORT = process.env.PORT || 3000;
-
 const Cwd = (...args: string[]) => path.resolve(process.cwd(), ...args);
 
-async function createServer() {
-  const app = fastify({});
-  await app.register(Middle);
-
-  /**
-   * @type {import('vite').ViteDevServer}
-   */
+export const useSSR = async (app: FastifyInstance) => {
+  await app.register(require("middie"));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vite = await (require as any)("vite").createServer({
     root: process.cwd(),
@@ -35,12 +26,13 @@ async function createServer() {
 
   const render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
 
+  app.use(vite.middlewares);
+
   app.get("*", async (req, res) => {
     try {
       const url = req.url;
 
       let template: string;
-      // const { render } = require(Cwd("dist/entry-server/entry-server.js"));
       template = fs.readFileSync(Cwd("index.html"), "utf-8");
       template = await vite.transformIndexHtml(url, template);
       const context: { url?: string } = {};
@@ -51,36 +43,13 @@ async function createServer() {
         // Somewhere a `<Redirect>` was rendered
         return res.redirect(301, context.url);
       }
-
       const html = template.replace(`<!--app-html-->`, appHtml);
-
-      // res.status(200).set({ "Content-Type": "text/html" }).end(html);
       res.status(200).headers({ "Content-Type": "text/html" }).send(html);
     } catch (e) {
-      !isProd && vite.ssrFixStacktrace(e);
+      vite.ssrFixStacktrace(e);
       console.log(e.stack);
       // res.status(500).end(e.stack);
       res.status(500).send(e.stack);
     }
   });
-
-  return { app, vite };
-}
-
-if (!isTest) {
-  createServer().then(({ app }) => {
-    const start = async () => {
-      console.log(`http://localhost:${PORT}`);
-      try {
-        await app.listen(PORT);
-      } catch (err) {
-        app.log.error(err);
-        process.exit(1);
-      }
-    };
-    start();
-  });
-}
-
-// for test use
-exports.createServer = createServer;
+};

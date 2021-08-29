@@ -2,6 +2,9 @@
 
 ## Feature
 
+开发环境下：SSR + NodeJS
+生产环境：NodeJS + SSG 预编译
+
 这应该是截止到 2021 年 9 月 1 日，React 较为完成的起步工程
 
 - 支持 SSG / SSR

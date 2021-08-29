@@ -5,10 +5,9 @@ import path from "path";
 import { parseURL } from "./parser";
 import { render } from "../src/entry-server";
 // const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
-const toAbsolute = (p: string) => path.resolve(cwd, p);
+const toAbsolute = (p: string) => path.resolve(process.cwd(), p);
 const distPath = "dist/static";
 const template = fs.readFileSync(toAbsolute(distPath + "/index.html"), "utf-8");
-const cwd = process.cwd();
 
 // determine routes to pre-render from src/pages
 let routesToPrerender = [];
@@ -33,7 +32,7 @@ const basePath = toAbsolute("src/pages");
 fixPagesRouter(basePath);
 routesToPrerender = routesToPrerender.map((v) => v.replace(basePath, ""));
 routesToPrerender.forEach((v) => {
-  const real = path.resolve(cwd, distPath, v.replace("/", ""));
+  const real = path.resolve(process.cwd(), distPath, v.replace("/", ""));
   fs.mkdirpSync(path.parse(real).dir);
 });
 
