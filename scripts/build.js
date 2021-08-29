@@ -17,7 +17,7 @@ const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const isDev = conf.dev || process.env.NODE_ENV === "dev";
 const cwd = process.cwd();
 
-const useConfig = ({ entry, outDir, isWatch, configFile = false } = {}) => {
+const useConfig = ({ entry, outDir, isWatch, configFile } = {}) => {
   return Vite.defineConfig({
     configFile,
     root: cwd,
@@ -44,13 +44,13 @@ const useConfig = ({ entry, outDir, isWatch, configFile = false } = {}) => {
 
 async function start() {
   await Vite.build(useConfig({ entry: "scripts/prerender.ts", outDir: "dist/prerender" }));
-  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server" }));
+  await Vite.build(useConfig({ entry: "src/entry-server.tsx", outDir: "dist/entry-server", configFile: false }));
   await Vite.build(
     useConfig({
       entry: isDev ? "scripts/server-dev.ts" : "scripts/server.ts",
       outDir: "dist/server-dev",
       isWatch: isDev,
-      configFile: void 0,
+      configFile: false,
     }),
   );
   if (isDev) {
