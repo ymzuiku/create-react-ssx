@@ -114,6 +114,9 @@ async function start() {
     await Vite.build(configs.entryServer);
     fs.copySync(Cwd("dist/static"), "dist/server/static");
     require(Cwd("dist/prerender/prerender.js"));
+    setTimeout(() => {
+      fs.removeSync("dist/prerender");
+    });
   }
 }
 
