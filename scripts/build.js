@@ -24,13 +24,6 @@ const define = {
   "process.env.BUILD": `"${process.env.BUILD}"`,
 };
 
-console.log({
-  isSSR,
-  buildStatic: isBuildStatic,
-  buildServer: isBuildServer,
-  define,
-});
-
 const devServerPath = Cwd("dist/server-dev/index.js");
 
 const requireTs = async (entry = "") => {
