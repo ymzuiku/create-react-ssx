@@ -1,9 +1,8 @@
 # react-vite-base
 
-## Feature
+这是一个 React 全栈项目，支持 SSR，同时并且可以很好的分离编译前后端代码（SSG）。后端仅仅是一个 fastify 的起步，足够轻量，你可以用此工程作为起点，开发一个用于商业生产的全栈项目。
 
-开发环境下：SSR + NodeJS
-生产环境：NodeJS + SSG 预编译
+## Feature
 
 这应该是截止到 2021 年 9 月 1 日，React 较为完成的起步工程
 
@@ -29,3 +28,8 @@
 
 - Q: 为什么 npm run dev 样式会延迟加载？
   - A: tailwind-jit 还未动态编译完
+- Q: 它和 NextJS 的区别
+  1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
+  2. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
+  3. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
+  4. 使用 React-Route 作为路由
