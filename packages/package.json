@@ -1,0 +1,15 @@
+{
+  "name": "create-react-ssx",
+  "version": "1.0.1",
+  "description": "",
+  "main": "creator.js",
+  "files": [
+    "creator.js"
+  ],
+  "bin": {
+    "create-react-ssx": "creator.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
