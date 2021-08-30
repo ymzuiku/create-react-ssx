@@ -42,12 +42,16 @@
 
 ## Deploy
 
-## 前端
+### 前端
 
 - 拷贝 dist/static 到静态服务器中
 
-## 后端
+### 后端
 
 - 本工程会根据 dependencies 的内容和本地的依赖 lock 文件，编译一份 package.json 到 dist/server 中
 - 确保 package.json 中 dependencies 均为纯后端依赖(若你使用 SSR，那么前端依赖也应该放到 dependencies 中)；同理，后端生产用不上的依赖应该放到 devDependencies 中
 - 拷贝 dist/server 到生产服务器中，然后执行进入到目录中安装依赖即可
+
+## 已知问题
+
+- 前端测试文件请勿放到 src/pages 中，这会导致 vite 的 import.meta.globEage 加载测试文件从而编译失败
