@@ -17,7 +17,7 @@ export function loadPages(basePath: string) {
         }
         let name = file.replace(/\.tsx$/, "").toLowerCase();
         name = "/" + name;
-        routesToPrerender.push(dir + name);
+        routesToPrerender.push(path.join(dir, name));
       });
   }
   fixPagesRouter(basePath);

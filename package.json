@@ -1,14 +1,18 @@
 {
   "name": "react-vite-base",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "node scripts/build.js",
-    "build": "cross-env NODE_ENV=production node scripts/build.js",
+    "build": "cross-env NODE_ENV=production USE_SSR=1 node scripts/build.js",
+    "build:server": "cross-env NODE_ENV=production BUILD=server USE_SSR=1 node scripts/build.js",
+    "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build.js",
     "serve": "node dist/server",
     "test": "jest --watch",
     "prepare": "husky install"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "fastify": "^3.20.2",
     "fastify-compress": "^3.6.0",
     "fastify-static": "^4.2.3",
@@ -17,8 +21,7 @@
     "node-fetch": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "vanilla-env": "0.1.7"
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",

@@ -3,59 +3,17 @@ const Vite = require("vite");
 const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
-
-const nodeLibs = [
-  "assert",
-  "async_hooks",
-  "buffer",
-  "child_process",
-  "cluster",
-  "console",
-  "crypto",
-  "dgram",
-  "diagnostics_channel",
-  "dns",
-  "domain",
-  "events",
-  "fs",
-  "fs/*",
-  "http",
-  "http2",
-  "https",
-  "inspector",
-  "module",
-  "net",
-  "os",
-  "path",
-  "perf_hooks",
-  "process",
-  "punycode",
-  "querystring",
-  "readline",
-  "repl",
-  "stream",
-  "string_decoder",
-  "tls",
-  "util",
-  "trace_events",
-  "tty",
-  "url",
-  "v8",
-  "vm",
-  "wasi",
-  "stream",
-  "node:stream/*",
-  "node:stream/web",
-  "worker_threads",
-  "zlib",
-];
+const define = {
+  "process.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
+  "process.env.USE_SSR": `"${process.env.USE_SSR}"`,
+};
 
 exports.serverDev = Vite.defineConfig({
   configFile: false,
   root: cwd,
   mode,
   logLevel: "error",
-  define: process.env,
+  define,
   build: {
     brotliSize: false,
     ssr: true,
@@ -70,8 +28,7 @@ exports.serverDev = Vite.defineConfig({
     outDir: "dist/server-dev",
     emptyOutDir: true,
     watch: {
-      buildDelay: 50,
-      clearScreen: false,
+      buildDelay: 30,
     },
   },
 });
@@ -81,7 +38,7 @@ exports.server = Vite.defineConfig({
   root: cwd,
   mode,
   logLevel: "info",
-  define: process.env,
+  define,
   build: {
     brotliSize: false,
     ssr: true,
@@ -96,36 +53,33 @@ exports.server = Vite.defineConfig({
     outDir: "dist/server",
     emptyOutDir: true,
   },
-  // esbuild: {
-  //   target: "es6",
-  //   exclude: [...nodeLibs],
-  // },
 });
 
-exports.prerender = Vite.defineConfig({
-  root: cwd,
-  mode,
-  logLevel: "info",
-  build: {
-    ssr: true,
-    sourcemap: !isProd,
-    minify: false,
-    target: "es6",
-    brotliSize: false,
-    lib: {
-      name: "prerender",
-      formats: ["cjs"],
-      entry: "scripts/prerender.ts",
+exports.tmp = (entry) =>
+  Vite.defineConfig({
+    root: cwd,
+    mode,
+    logLevel: "error",
+    build: {
+      ssr: true,
+      sourcemap: !isProd,
+      minify: false,
+      target: "es6",
+      brotliSize: false,
+      lib: {
+        name: entry,
+        formats: ["cjs"],
+        entry,
+      },
+      outDir: "dist/tmp",
+      emptyOutDir: false,
     },
-    outDir: "dist/prerender",
-    emptyOutDir: false,
-  },
-});
+  });
 
 exports.entryServer = Vite.defineConfig({
   root: cwd,
   mode,
-  logLevel: "info",
+  logLevel: "error",
   build: {
     ssr: true,
     sourcemap: false,
