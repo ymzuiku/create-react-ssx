@@ -1,13 +1,13 @@
 import { fastify } from "fastify";
 import { useSSR } from "../scripts/useSSR";
 const PORT = process.env.PORT || 3000;
-const isProd = process.env.NODE_ENV === "production";
-console.log("-----isProd", isProd);
 
 const app = fastify({});
-
+app.get("/ping", async (res) => {
+  return { name: "hello", data: res.body };
+});
 async function start() {
-  if (!isProd) {
+  if (process.env.NODE_ENV !== "production") {
     await useSSR(app);
   }
   try {
@@ -18,4 +18,5 @@ async function start() {
     process.exit(1);
   }
 }
+
 start();

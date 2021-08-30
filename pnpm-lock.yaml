@@ -38,6 +38,7 @@ specifiers:
   tailwindcss: ^2.2.7
   tslib: ^2.3.1
   typescript: ^4.3.5
+  vanilla-env: 0.1.7
   vite: ^2.4.4
   vite-plugin-imagemin: ^0.4.5
   vite-react-jsx: ^1.1.2
@@ -53,6 +54,7 @@ dependencies:
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-router-dom: 5.2.0_react@17.0.2
+  vanilla-env: 0.1.7
 
 devDependencies:
   "@testing-library/jest-dom": 5.14.1
@@ -8343,6 +8345,11 @@ packages:
   /value-equal/1.0.1:
     resolution:
       { integrity: sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw== }
+    dev: false
+
+  /vanilla-env/0.1.7:
+    resolution:
+      { integrity: sha512-/8NZpwCD/V0m5OegYlzft04T+/950l57qSgjhhwU/P/wGXFr1DCd5y08vzQ8umNZsu+52Rc1pTw9oErytWMKVA== }
     dev: false
 
   /vite-plugin-imagemin/0.4.5_vite@2.5.1:

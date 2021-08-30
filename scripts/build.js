@@ -13,7 +13,7 @@ const configs = {
     configFile: false,
     root: cwd,
     mode,
-    logLevel: "info",
+    logLevel: isProd ? "info" : "error",
     define: process.env,
     build: {
       ssr: true,
@@ -38,8 +38,7 @@ const configs = {
   prerender: Vite.defineConfig({
     root: cwd,
     mode,
-    define: {},
-    logLevel: "info",
+    logLevel: isProd ? "info" : "error",
     build: {
       ssr: true,
       sourcemap: true,
@@ -58,7 +57,7 @@ const configs = {
     root: cwd,
     mode,
     define: process.env,
-    logLevel: "info",
+    logLevel: isProd ? "info" : "error",
     build: {
       outDir: "dist/static",
     },
@@ -66,15 +65,16 @@ const configs = {
 };
 
 let child;
-function onBoundleEnd() {
+async function onBoundleEnd() {
   if (child) {
-    child.kill(0);
+    child.kill(1);
     child = null;
   }
   child = child_process.spawn("node", [buildPath], {
     stdio: "inherit",
     env: process.env,
   });
+  console.log("Runing...");
 }
 
 async function start() {
