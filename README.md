@@ -14,6 +14,19 @@
 - jest + esbuild
 - pre-commit 配置：格式化 prettier，校验 eslint，单元测试，均通过后才可提交
 - 支持服务端开发（服务端基于 cluster.fork 的热更新）
+- 可以单独仅开发后端服务, 只需要删除工程根目录下 src 和 index.html 即是一个单纯的后端项目
+
+## FQA
+
+- Q: 它和 NextJS 的区别
+  1. 此工程的初衷就是全栈项目，它给你一个干净的 NodeJS 后端起点。
+  1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
+  1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
+  1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
+  1. 使用 React-Route 作为路由
+  1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、eslint、prettier、pre-commit、jest(es-build)
+- Q: 为什么 npm run dev 样式会延迟加载？
+  - 开发环境下 tailwind-jit 还未动态编译完
 
 ## Scripts
 
@@ -23,15 +36,3 @@
 - npm run dev : 启动开发模式
 - npm run build : 编译 SSG
 - npm run server : 启动服务
-
-## FQA
-
-- Q: 为什么 npm run dev 样式会延迟加载？
-  - A: tailwind-jit 还未动态编译完
-- Q: 它和 NextJS 的区别
-  1. 此工程的初衷就是全栈项目，它给你一个干净的 NodeJS 后端起点。
-  1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
-  1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
-  1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
-  1. 使用 React-Route 作为路由
-  1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、eslint、prettier、pre-commit、jest(es-build)

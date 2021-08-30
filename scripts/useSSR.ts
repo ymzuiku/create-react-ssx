@@ -4,16 +4,14 @@ import fs from "fs-extra";
 import { parseURL } from "./parser";
 import { loadPages, Cwd, Dir } from "./loader";
 
-const isProd = process.env.NODE_ENV === "production";
-const isSSR = !isProd || process.env.USE_SSR === "1";
-
 export const useSSR = async (app: FastifyInstance) => {
-  if (!isSSR) {
+  if (process.env.USE_SSR !== "1") {
     return;
   }
+  const isProd = process.env.NODE_ENV === "production";
   const indexProd = isProd ? fs.readFileSync(Dir("static/index.html"), "utf-8") : "";
   let baseHTML: string;
-  let routers: string[];
+  let routers: string[] = [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let render: any;
   await app.register(require("middie"));
@@ -32,7 +30,6 @@ export const useSSR = async (app: FastifyInstance) => {
     }
   } else {
     const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vite = await (require as any)("vite").createServer({
       root: process.cwd(),
@@ -54,7 +51,6 @@ export const useSSR = async (app: FastifyInstance) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (app as any).use(vite.middlewares);
   }
-
   routers.map(parseURL).forEach((url) => {
     app.get(url, async (req, res) => {
       try {
