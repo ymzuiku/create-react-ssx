@@ -4,8 +4,22 @@ import fs from "fs-extra";
 import { parseURL } from "./parser";
 import { loadPages, Cwd, Dir } from "./loader";
 
+function useStatic(app: FastifyInstance) {
+  app.register(require("fastify-compress"), { global: false });
+  const staticPath = Dir("static");
+  if (fs.existsSync(staticPath)) {
+    app.register(require("fastify-static"), {
+      root: staticPath,
+      prefix: "/",
+    });
+  }
+}
+
 export const useSSR = async (app: FastifyInstance) => {
-  if (process.env.USE_SSR !== "1") {
+  if (process.env.BUILD === "ssr" || process.env.USE_SSR === "ssg") {
+    useStatic(app);
+  }
+  if (process.env.BUILD !== "ssr") {
     return;
   }
   const isProd = process.env.NODE_ENV === "production";
@@ -20,14 +34,6 @@ export const useSSR = async (app: FastifyInstance) => {
   if (isProd) {
     routers = require(Dir("ssr-pages.json"));
     render = require(Dir("entry-server.js")).render;
-    app.register(require("fastify-compress"), { global: false });
-    const staticPath = Dir("static");
-    if (fs.existsSync(staticPath)) {
-      app.register(require("fastify-static"), {
-        root: staticPath,
-        prefix: "/",
-      });
-    }
   } else {
     const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

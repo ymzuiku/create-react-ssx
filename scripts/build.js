@@ -9,46 +9,27 @@ const isProd = process.env.NODE_ENV === "production";
 
 function checkIsSSR() {
   const isHaveSrc = fs.existsSync(Cwd("src")) && fs.existsSync(Cwd("index.html"));
-  // 是否使用SSR
-  let isSSR = process.env.USE_SSR === "1" && fs.existsSync(Cwd("src/pages"));
-
-  // 若工程为开发环境，且有 src 和 index.html 那么默认启动 SSR
-  if (!isProd && isHaveSrc && process.env.USE_SSR === void 0) {
-    isSSR = true;
-  }
-  // 若未有 src 和 index.html，不启用SSR
   if (!isHaveSrc) {
-    isSSR = false;
+    return false;
   }
-  return isSSR;
-}
-
-function checkBuildStatic() {
-  let buildStatic = process.env.BUILD === "static";
-  // 若使用SSR，必定需要编译静态资源
-  if (checkIsSSR()) {
-    buildStatic = true;
-  }
-  return buildStatic;
-}
-
-function checkBuildServer() {
-  let buildServer = process.env.BUILD === "server";
-  // 若均没有设置，默认启动服务端编译
-  if (process.env.BUILD !== "server" && process.env.BUILD !== "static") {
-    buildServer = true;
-  }
-  return buildServer;
+  return process.env.BUILD === "ssr";
 }
 
 const isSSR = checkIsSSR();
-const buildStatic = checkBuildStatic();
-const buildServer = checkBuildServer();
-
+const isSSG = process.env.BUILD === "ssg";
+const isBuildStatic = process.env.BUILD !== "server";
+const isBuildServer = process.env.BUILD !== "static";
 const define = {
   "process.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
-  "process.env.USE_SSR": `"${isSSR ? process.env.USE_SSR : "0"}"`,
+  "process.env.BUILD": `"${process.env.BUILD}"`,
 };
+
+console.log({
+  isSSR,
+  buildStatic: isBuildStatic,
+  buildServer: isBuildServer,
+  define,
+});
 
 const devServerPath = Cwd("dist/server-dev/index.js");
 
@@ -81,7 +62,7 @@ async function onBoundleEnd() {
     worker.kill(1);
     worker = null;
   }
-  // console.clear();
+  console.clear();
   worker = child_process.spawn("node", [devServerPath], {
     stdio: "inherit",
     env: process.env,
@@ -89,7 +70,7 @@ async function onBoundleEnd() {
 }
 
 async function build() {
-  if (buildServer) {
+  if (isBuildServer) {
     const watcher = await Vite.build(isProd ? configs.server(define) : configs.serverDev(define));
 
     if (!isProd) {
@@ -102,20 +83,21 @@ async function build() {
   }
 
   if (isProd) {
-    if (buildStatic) {
+    if (isBuildStatic) {
       await Vite.build(configs.static(define));
       await requireTs("scripts/prerender.ts");
     }
 
-    if (buildServer) {
+    if (isBuildServer) {
+      if (isSSR || isSSG) {
+        fs.copySync(Cwd("dist/static"), "dist/server/static");
+      }
       if (isSSR) {
         await Vite.build(configs.entryServer());
-        fs.copySync(Cwd("dist/static"), "dist/server/static");
         const loader = await requireTs("scripts/loader.ts");
         const ssrPages = loader.loadPages(Cwd("src/pages"));
         fs.writeJSONSync(Cwd("dist/server/ssr-pages.json"), ssrPages, { spaces: 2 });
       }
-
       copyPackage();
       copyFiles([".env", "pnpm-lock.yaml", "yarn.lock", "package-lock.json"]);
     }

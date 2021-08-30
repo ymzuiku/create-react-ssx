@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/build.js",
-    "build": "cross-env NODE_ENV=production USE_SSR=1 node scripts/build.js",
-    "build:server": "cross-env NODE_ENV=production BUILD=server USE_SSR=1 node scripts/build.js",
+    "dev": "cross-env BUILD=ssr node scripts/build.js",
+    "build:ssr": "cross-env NODE_ENV=production BUILD=ssr node scripts/build.js",
+    "build:ssg": "cross-env NODE_ENV=production BUILD=ssg node scripts/build.js",
+    "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build.js",
     "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build.js",
     "serve": "node dist/server",
     "test": "jest --watch",

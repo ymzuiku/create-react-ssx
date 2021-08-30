@@ -6,13 +6,13 @@ import legacy from "@vitejs/plugin-legacy";
 
 const isProd = process.env.NODE_ENV === "production";
 
-// 仅应用于前端编译配置
+// 此配置仅应用于前端编译
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     reactRefresh(),
     reactJsx(),
-    // isProd && legacy({ targets: ["defaults", "not IE 11"] }),
+    isProd && legacy({ targets: ["defaults", "not IE 11"] }),
     isProd &&
       viteImagemin({
         gifsicle: {
@@ -42,7 +42,4 @@ export default defineConfig({
         },
       }),
   ].filter(Boolean),
-  // esbuild: {
-  //   jsxInject: `import React from 'react';`,
-  // },
 });

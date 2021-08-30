@@ -34,5 +34,20 @@
 
 - pnpm i : 安装依赖
 - npm run dev : 启动开发模式
-- npm run build : 编译 SSG
+- npm run build:ssr : 编译生产 SSR
+- npm run build:ssg : 前端预编译(SSG) 并且拷贝静态资源到服务端
+- npm run build:server : 编译生产的纯后端
+- npm run build:static : 前端预编译(SSG)
 - npm run server : 启动服务
+
+## Deploy
+
+## 前端
+
+- 拷贝 dist/static 到静态服务器中
+
+## 后端
+
+- 本工程会根据 dependencies 的内容和本地的依赖 lock 文件，编译一份 package.json 到 dist/server 中
+- 确保 package.json 中 dependencies 均为纯后端依赖(若你使用 SSR，那么前端依赖也应该放到 dependencies 中)；同理，后端生产用不上的依赖应该放到 devDependencies 中
+- 拷贝 dist/server 到生产服务器中，然后执行进入到目录中安装依赖即可
