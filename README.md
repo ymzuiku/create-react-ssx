@@ -33,3 +33,4 @@
   2. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
   3. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
   4. 使用 React-Route 作为路由
+  5. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、eslint、prettier、pre-commit、jest(es-build)
