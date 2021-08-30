@@ -1,7 +1,7 @@
 const Vite = require("vite");
 const path = require("path");
 const fs = require("fs-extra");
-const configs = require("./vite.configs");
+const configs = require("./viteConfigs");
 
 const child_process = require("child_process");
 const Cwd = (...args) => path.resolve(process.cwd(), ...args);
