@@ -2,7 +2,7 @@
 import type { FastifyInstance } from "fastify";
 import fs from "fs";
 import { parseURL } from "./parser";
-import { parseSrcPages, Cwd } from "./parser-server";
+import { loadPages, Cwd } from "./loadPages";
 
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 
@@ -29,7 +29,7 @@ export const useSSR = async (app: FastifyInstance) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (app as any).use(vite.middlewares);
 
-  parseSrcPages(Cwd("src/pages"))
+  loadPages(Cwd("src/pages"))
     .map(parseURL)
     .forEach((url) => {
       app.get(url, async (req, res) => {

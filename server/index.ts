@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = fastify({});
 app.get("/ping", async (res) => {
-  return { name: "hello", data: res.body };
+  return { name: "pong", data: res.body };
 });
 async function start() {
   if (process.env.NODE_ENV !== "production") {

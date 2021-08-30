@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 
-export function parseSrcPages(basePath: string) {
+export function loadPages(basePath: string) {
   let routesToPrerender: string[] = [];
   function fixPagesRouter(dir: string) {
     fs.readdirSync(dir)
