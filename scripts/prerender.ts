@@ -3,7 +3,7 @@
 import fs from "fs-extra";
 import path from "path";
 import { parseURL } from "./parser";
-import { loadPages, Cwd } from "./loadPages";
+import { loadPages, Cwd } from "./loader";
 import { render } from "../src/entry-server";
 // const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
 

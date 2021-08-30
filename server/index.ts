@@ -7,9 +7,10 @@ app.get("/ping", async (res) => {
   return { name: "pong", data: res.body };
 });
 async function start() {
-  if (process.env.NODE_ENV !== "production") {
-    await useSSR(app);
-  }
+  // if (process.env.NODE_ENV !== "production") {
+  //   await useSSR(app);
+  // }
+  await useSSR(app);
   try {
     console.log(`http://localhost:${PORT}`);
     await app.listen(PORT);

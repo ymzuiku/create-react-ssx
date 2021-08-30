@@ -26,4 +26,6 @@ export function loadPages(basePath: string) {
   return routesToPrerender;
 }
 
-export const Cwd = (...args: string[]) => path.resolve(process.cwd(), ...args);
+const cwd = process.cwd();
+export const Cwd = (...args: string[]) => path.resolve(cwd, ...args);
+export const Dir = (...args: string[]) => path.resolve(__dirname, ...args);

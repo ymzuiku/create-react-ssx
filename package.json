@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "node scripts/build.js",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
-    "server": "node dist/server",
+    "serve": "node dist/server",
     "test": "jest --watch",
     "prepare": "husky install"
   },
