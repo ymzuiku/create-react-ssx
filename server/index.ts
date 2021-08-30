@@ -7,6 +7,9 @@ app.get("/ping", async (res) => {
   return { name: "pong", data: res.body };
 });
 async function start() {
+  import("./sub").then(({ sub }) => {
+    sub();
+  });
   // if (process.env.NODE_ENV !== "production") {
   //   await useSSR(app);
   // }
