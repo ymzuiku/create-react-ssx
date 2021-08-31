@@ -16,8 +16,6 @@ if (ssrEle) {
 
 const lazyFn = {} as Record<string, (props: unknown) => Promise<unknown>>;
 
-const fisrtInRoutes = {} as Record<string, boolean>;
-
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
   lazyFn[path] = pages[key];
   return {
@@ -27,10 +25,9 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { default: Component, getServerSideProps } = await (pages[key] as any)();
       const ssrProps = serverSideProps[window.location.pathname];
-      if (!fisrtInRoutes[path] && ssrProps) {
-        fisrtInRoutes[path] = true;
+      if (ssrProps) {
         return {
-          default: () => Component({ ...ssrProps, bySSR: true }),
+          default: () => Component(ssrProps),
         };
       }
       if (getServerSideProps) {

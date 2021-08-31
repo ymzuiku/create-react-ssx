@@ -15,12 +15,12 @@
 - pre-commit 配置：格式化 prettier，校验 eslint，单元测试，均通过后才可提交
 - 支持服务端开发（服务端基于 cluster.fork 的热更新）
 - 可以单独仅开发后端服务, 只需要删除工程根目录下 src 和 index.html 即是一个单纯的后端项目
-- 可以在开发模式中使用SSR，编译时分别编译，既享有全栈的开发体验，又享有前后端分离的编译和部署
+- 可以在开发模式中使用 SSR，编译时分别编译，既享有全栈的开发体验，又享有前后端分离的编译和部署
 
 ## FQA
 
 - Q: 它和 NextJS 的区别
-  1. 此工程的初衷就是全栈项目，它给你一个干净的 NodeJS 后端起点。
+  1. 此工程的初衷是全栈项目，它给你一个干净的 NodeJS 后端起点。
   1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
   1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
   1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
@@ -28,7 +28,8 @@
   1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、eslint、prettier、pre-commit、jest(es-build)
 - Q: 为什么 npm run dev 样式会延迟加载？
   - 开发环境下 tailwind-jit 还未动态编译完
-
+- Q: 为什么会遇到错误: `ReferenceError: window is not defined` 或者 `fetch is not defined`
+  - 雷同于 NextJS，在组件 SSR\SSG 时，请不要在 onMound 生命周期之前访问 window 下的对象
 
 ## Getting Started
 
@@ -42,7 +43,6 @@ cd my-project
 npm install
 ```
 
-
 ### Script
 
 - npm run dev : 启动开发模式
@@ -51,6 +51,20 @@ npm install
 - npm run build:server : 编译生产的纯后端
 - npm run build:static : 前端预编译(SSG)
 - npm run server : 预览遍以后的服务
+
+## SSR 获取数据
+
+1. 雷同 NextJS 的 `getServerSideProps` API, 在页面组建中，`export getServerSideProps` 方法，SSR 在渲染组件之前会先抓取数据，注入到页面的 Props 中
+2. 注意 getServerSideProps 不仅在 SSR 模式中生效，在 SSG (静态预渲染) 中会阻塞组件渲染，直到拿到数据。
+3. getServerSideProps 的数据仅在 SSR 时或组件第一次渲染时执行一次，它并不适合做客户端动态更新的请求
+4. 在开发模式中 getServerSideProps 永远都从前端获取数据；(原因：为了更高效的开发环境，前端热更新和后端热重启是分离的，getServerSideProps 的代码在前端代码中，而实际执行在后端代码中).
+
+```tsx
+export const getServerSideProps = async (req: GetServerSideRequire) => {
+  await new Promise((res) => setTimeout(res, 100));
+  return { str: "user", dog: req.query.dog, query2: req.query };
+};
+```
 
 ## Deploy
 
