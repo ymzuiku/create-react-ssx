@@ -1,46 +1,38 @@
 import "./assets/tailwind.css";
 import { hydrate } from "react-dom";
-import { lazy } from "react";
+import React, { lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages } from "../scripts/parsers";
 
 const pages = import.meta.glob("./pages/**/*.tsx");
 
-let serverSideProps = {} as Record<string, unknown>;
-const ssrEle = document.getElementById("ssr-props");
-if (ssrEle) {
-  serverSideProps = JSON.parse(ssrEle.innerText);
-}
+const lazyFnMap = {} as Record<string, () => Promise<{ default: React.FC }>>;
 
-const routes = parsePages(pages).map(({ path, key, routerPath }) => {
+const routes = parsePages(pages).map(({ path, key }) => {
+  const lazyFn = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Component = (await Promise.resolve((pages[key] as any)())).default;
+    return { default: Component };
+  };
+  lazyFnMap[path] = lazyFn;
   return {
     path,
-    routerPath,
-    Component: lazy(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { default: Component, getServerSideProps } = await (pages[key] as any)();
-      if (serverSideProps[window.location.pathname]) {
-        return {
-          default: () => Component(serverSideProps[window.location.pathname]),
-        };
-      }
-      if (getServerSideProps) {
-        const ssrProps = await getServerSideProps(window.location.search, window.location.pathname);
-        return {
-          default: () => Component(ssrProps),
-        };
-      }
-      return {
-        default: Component,
-      };
-    }),
+    Component: lazy(lazyFn),
   };
 });
 
-hydrate(
-  <BrowserRouter>
-    <App routes={routes} serverSideProps={serverSideProps} />
-  </BrowserRouter>,
-  document.getElementById("app"),
-);
+function render() {
+  hydrate(
+    <BrowserRouter>
+      <App routes={routes} />
+    </BrowserRouter>,
+    document.getElementById("app"),
+  );
+}
+
+if (lazyFnMap[window.location.pathname]) {
+  Promise.resolve(lazyFnMap[window.location.pathname]()).then(render);
+} else {
+  render();
+}

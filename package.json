@@ -1,10 +1,9 @@
 {
-  "name": "create-react-ssx",
+  "name": "create-react-ssg",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env BUILD=ssr node scripts/build.js",
-    "build:ssr": "cross-env NODE_ENV=production BUILD=ssr node scripts/build.js",
+    "dev": "cross-env node scripts/build.js",
     "build:ssg": "cross-env NODE_ENV=production BUILD=ssg node scripts/build.js",
     "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build.js",
     "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build.js",

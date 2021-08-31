@@ -7,23 +7,14 @@ const child_process = require("child_process");
 const Cwd = (...args) => path.resolve(process.cwd(), ...args);
 const isProd = process.env.NODE_ENV === "production";
 
-function checkIsSSR() {
-  const isHaveSrc = fs.existsSync(Cwd("src")) && fs.existsSync(Cwd("index.html"));
-  if (!isHaveSrc) {
-    return false;
-  }
-  return process.env.BUILD === "ssr";
-}
-
-const isSSR = checkIsSSR();
-const isSSG = process.env.BUILD === "ssg";
-const isBuildStatic = process.env.BUILD !== "server";
-const isBuildServer = process.env.BUILD !== "static";
+const isHaveSrc = fs.existsSync(Cwd("src")) && fs.existsSync(Cwd("index.html"));
+const isHaveServer = fs.existsSync(Cwd("server"));
+const isBuildStatic = isHaveSrc && process.env.BUILD !== "server";
+const isBuildServer = isHaveServer && process.env.BUILD !== "static";
 const define = {
   "process.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
   "process.env.BUILD": `"${process.env.BUILD}"`,
 };
-
 const devServerPath = Cwd("dist/server-dev/index.js");
 
 const requireTs = async (entry = "") => {
@@ -83,10 +74,8 @@ async function build() {
     }
 
     if (isBuildServer) {
-      if (isSSR || isSSG) {
+      if (isBuildStatic) {
         fs.copySync(Cwd("dist/static"), "dist/server/static");
-      }
-      if (isSSR) {
         await Vite.build(configs.entryServer());
       }
       copyPackage();

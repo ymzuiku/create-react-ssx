@@ -1,6 +1,6 @@
 import "./dotenv";
 import { fastify } from "fastify";
-import { useSSR } from "../scripts/useSSR";
+import { useSSG } from "../scripts/useSSG";
 const PORT = process.env.PORT || 3000;
 
 const app = fastify({});
@@ -9,7 +9,7 @@ app.get("/ping", async (res) => {
 });
 
 async function start() {
-  await useSSR(app);
+  await useSSG(app);
   try {
     console.log(`http://localhost:${PORT}`);
     await app.listen(PORT);

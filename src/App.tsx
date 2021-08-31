@@ -16,24 +16,20 @@ const CSRSuspense = ({ ssr, children, fallback }: CSRSuspenseProps) => {
 
 export interface AppProps {
   ssr?: boolean;
-  serverSideProps: Record<string, unknown>;
   routes: {
     path: string;
-    routerPath: string;
     Component: React.FC;
-    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
   }[];
 }
 
-export function App({ ssr, routes, serverSideProps }: AppProps) {
+export function App({ ssr, routes }: AppProps) {
   return (
     <CSRSuspense ssr={ssr} fallback={<div style={{ all: "unset" }}></div>}>
       <Switch>
-        {routes.map(({ path, Component, routerPath }) => {
-          const ssrProps = serverSideProps[routerPath] as Record<string, unknown>;
+        {routes.map(({ path, Component }) => {
           return (
             <Route exact key={path} path={[path, path + ".html"]}>
-              <Component {...(ssrProps || {})} />
+              <Component />
             </Route>
           );
         })}
