@@ -29,6 +29,7 @@ worker.addListener('close', (code)=>{
   if (code === 0) {
     fs.rmSync(Cwd(dir, ".git"), {recursive: true, force: true})
     fs.rmSync(Cwd(dir, "packages"), {recursive: true, force: true})
+    fs.rmSync(Cwd(dir, "pnpm-lock.yaml"), {recursive: true, force: true})
     console.log(" ")
     console.log("Create react SSX Done! Please go on:")
     console.log(`cd ${dir} && pnpm install`)

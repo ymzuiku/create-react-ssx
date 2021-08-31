@@ -38,14 +38,10 @@
 
 ```bash
 npx create-react-ssx my-project
-```
-
-安装依赖请使用 [pnpm](https://pnpm.js.org/):
-
-```bash
 cd my-project
-pnpm install
+npm install
 ```
+
 
 ### Script
 
