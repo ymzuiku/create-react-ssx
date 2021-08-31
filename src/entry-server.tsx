@@ -37,20 +37,18 @@ export async function render(
     const route = routeMap[req.routerPath];
     if (route && route.getServerSideProps) {
       serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
-      console.log("ssr load", serverSideProps[req.routerPath]);
     }
   }
 
-  return ReactDOMServer.renderToString(
-    <div>
-      {isProd && req && (
-        <div id="ssr-props" style={{ display: "none" }}>
-          {JSON.stringify(serverSideProps)}
-        </div>
-      )}
-      <StaticRouter location={url} context={context}>
-        <App routes={routes} ssr serverSideProps={serverSideProps} />
-      </StaticRouter>
-    </div>,
+  const appHtml = ReactDOMServer.renderToString(
+    <StaticRouter location={url} context={context}>
+      <App routes={routes} ssr serverSideProps={serverSideProps} />
+    </StaticRouter>,
   );
+
+  const serverSideStr = `<script>
+    window.serverSideProps = ${JSON.stringify(serverSideProps)}
+  </script>`;
+
+  return [appHtml, serverSideStr];
 }

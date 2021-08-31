@@ -8,11 +8,9 @@ import { parsePages, parseSearch } from "../scripts/parsers";
 const pages = import.meta.glob("./pages/**/*.tsx");
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let serverSideProps: any = {};
-const ssrEle = document.getElementById("ssr-props");
-if (ssrEle) {
-  serverSideProps = JSON.parse(ssrEle.innerText);
-}
+const serverSidePropsString = (window as any).serverSideProps;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serverSideProps: any = serverSidePropsString ? JSON.parse(serverSidePropsString) : {};
 
 const lazyFn = {} as Record<string, (props: unknown) => Promise<unknown>>;
 

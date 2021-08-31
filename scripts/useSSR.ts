@@ -73,7 +73,7 @@ export const useSSR = async (app: FastifyInstance) => {
         }
         const context: { url?: string } = {};
 
-        const appHtml = await render(parsededURL, context, {
+        const [appHtml, ssrProps] = await render(parsededURL, context, {
           query: req.query,
           routerPath: req.routerPath,
         });
@@ -81,7 +81,7 @@ export const useSSR = async (app: FastifyInstance) => {
         if (isProd && context.url) {
           return reply.redirect(301, context.url);
         }
-        const html = template.replace(`<!--app-html-->`, appHtml);
+        const html = template.replace(`<!--app-html-->`, appHtml).replace("<!--ssr-props-->", ssrProps);
         reply.status(200).headers({ "Content-Type": "text/html" }).send(html);
       } catch (e) {
         if (!isProd) {
