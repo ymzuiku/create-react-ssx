@@ -36,3 +36,40 @@ export function parsePages(data: any) {
       };
     });
 }
+
+function decode(input: string) {
+  try {
+    return decodeURIComponent(input.replace(/\+/g, " "));
+  } catch (e) {
+    return null;
+  }
+}
+
+export function parseSearch(search?: string, withoutNumber?: boolean) {
+  if (!search) {
+    return {};
+  }
+
+  const parser = /([^=?&]+)=?([^&]*)/g;
+  const result: Record<string, unknown> = {};
+  let part;
+
+  while ((part = parser.exec(search))) {
+    const key = decode(part[1]);
+    const value = decode(part[2]);
+
+    if (key === null || value === null || key in result) {
+      continue;
+    }
+    if (!withoutNumber && typeof value === "string") {
+      const num = Number(value);
+      const numberValue = isNaN(num) ? value : num;
+
+      result[key] = value == numberValue.toString() ? numberValue : value;
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}

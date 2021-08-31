@@ -18,5 +18,5 @@ export default function User(props: Record<string, unknown>) {
 }
 export const getServerSideProps = async (query: Record<string, unknown>) => {
   const str = await fetch("/ping", { method: "GET" }).then((v) => v.text());
-  return { str: "user" + str, date: new Date().toString(), dog: query.dog, query2: query };
+  return { str: "user5" + str, date: new Date().toString(), dog: query.dog, query2: query };
 };

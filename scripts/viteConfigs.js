@@ -77,10 +77,11 @@ exports.tmp = (entry) =>
     },
   });
 
-exports.entryServer = () =>
+exports.entryServer = (define) =>
   Vite.defineConfig({
     root: cwd,
     mode,
+    define,
     logLevel: "error",
     configFile: false,
     plugins: [reactRefresh(), reactJsx()],

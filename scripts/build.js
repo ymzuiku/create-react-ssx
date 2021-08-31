@@ -87,7 +87,7 @@ async function build() {
         fs.copySync(Cwd("dist/static"), "dist/server/static");
       }
       if (isSSR) {
-        await Vite.build(configs.entryServer());
+        await Vite.build(configs.entryServer(define));
       }
       copyPackage();
       copyFiles([".env", "pnpm-lock.yaml", "yarn.lock", "package-lock.json"]);
