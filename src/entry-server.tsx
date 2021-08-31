@@ -3,7 +3,6 @@ import { StaticRouter } from "react-router-dom";
 import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
 import { parsePages } from "../scripts/parsers";
-import type { GetServerSideRequire } from "../scripts/serverSideProps";
 const pages = import.meta.globEager("./pages/**/*.tsx");
 
 const routeMap: Record<
@@ -12,7 +11,7 @@ const routeMap: Record<
     path: string;
     routerPath: string;
     Component: React.FC;
-    getServerSideProps?: (req: GetServerSideRequire) => Promise<Record<string, unknown>>;
+    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
   }
 > = {};
 
@@ -28,11 +27,15 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
 
 const serverSideProps: Record<string, unknown> = {};
 
-export async function render(url: string, context: StaticRouterContext, req?: GetServerSideRequire) {
+export async function render(
+  url: string,
+  context: StaticRouterContext,
+  req?: { routerPath: string; query: Record<string, unknown> },
+) {
   if (req) {
     const route = routeMap[req.routerPath];
     if (route && route.getServerSideProps) {
-      serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req));
+      serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
     }
   }
 

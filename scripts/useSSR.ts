@@ -37,8 +37,6 @@ export const useSSR = async (app: FastifyInstance) => {
       server: {
         middlewareMode: "ssr",
         watch: {
-          // During tests we edit the files too fast and sometimes chokidar
-          // misses change events, so enforce polling for consistency
           usePolling: true,
           interval: 100,
         },
@@ -65,19 +63,11 @@ export const useSSR = async (app: FastifyInstance) => {
         const context: { url?: string } = {};
 
         const appHtml = await render(parseURL(url), context, {
-          headers: req.headers,
           query: req.query,
-          params: req.params,
-          ips: req.ips,
-          ip: req.ip,
-          hostname: req.hostname,
-          url: req.url,
-          protocol: req.protocol,
           routerPath: req.routerPath,
         });
 
         if (isProd && context.url) {
-          // Somewhere a `<Redirect>` was rendered
           return reply.redirect(301, context.url);
         }
         const html = template.replace(`<!--app-html-->`, appHtml);
@@ -87,7 +77,6 @@ export const useSSR = async (app: FastifyInstance) => {
           vite.ssrFixStacktrace(e);
         }
         console.log(e.stack);
-        // res.status(500).end(e.stack);
         reply.status(500).send(e.stack);
       }
     });

@@ -21,6 +21,7 @@ export interface AppProps {
     path: string;
     routerPath: string;
     Component: React.FC;
+    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
   }[];
 }
 
@@ -29,10 +30,10 @@ export function App({ ssr, routes, serverSideProps }: AppProps) {
     <CSRSuspense ssr={ssr} fallback={<div style={{ all: "unset" }}></div>}>
       <Switch>
         {routes.map(({ path, Component, routerPath }) => {
-          const ssrProps = (serverSideProps[routerPath] || {}) as Record<string, unknown>;
+          const ssrProps = serverSideProps[routerPath] as Record<string, unknown>;
           return (
             <Route exact key={path} path={[path, path + ".html"]}>
-              <Component {...ssrProps} />
+              <Component {...(ssrProps || {})} />
             </Route>
           );
         })}

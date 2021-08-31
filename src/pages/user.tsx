@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import type { GetServerSideRequire } from "../../scripts/serverSideProps";
 
-export default function User() {
+export default function User(props: Record<string, unknown>) {
   const [state, setState] = useState("");
   useEffect(() => {
     fetch("/ping", { method: "GET" })
@@ -13,10 +12,11 @@ export default function User() {
   return (
     <>
       <div>use react testing: {state}</div>
+      <div>ssr props: {JSON.stringify(props)}</div>
     </>
   );
 }
-export const getServerSideProps = async (req: GetServerSideRequire) => {
+export const getServerSideProps = async (query: Record<string, unknown>) => {
   const str = await fetch("/ping", { method: "GET" }).then((v) => v.text());
-  return { str: "user" + str, date: new Date().toString(), dog: req.query.dog, query2: req.query };
+  return { str: "user" + str, date: new Date().toString(), dog: query.dog, query2: query };
 };
