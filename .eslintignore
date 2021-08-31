@@ -1,2 +1,3 @@
 *.js
 vite.config.ts
+cypress
