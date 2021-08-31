@@ -52,6 +52,19 @@ npm install
 - npm run build:static : 前端预编译(SSG)
 - npm run server : 预览遍以后的服务
 
+## SSR 获取数据
+
+1. 雷同 NextJS 的 `getServerSideProps` API, 在页面组建中，`export getServerSideProps` 方法，SSR 在渲染组件之前会先抓取数据，注入到页面的 Props 中
+2. **注意 getServerSideProps 仅在 SSR 模式中生效，SSG (静态预渲染) 中不会起作用.**
+3. 修改 getServerSideProps 方法，需要重启服务才会生效；(原因：为了更高效的开发环境，前端热更新和后端热重启是分离的，getServerSideProps 的代码在前端代码中，而实际执行在后端代码中).
+
+```tsx
+export const getServerSideProps = async (req: GetServerSideRequire) => {
+  await new Promise((res) => setTimeout(res, 100));
+  return { str: "user", dog: req.query.dog, query2: req.query };
+};
+```
+
 ## Deploy
 
 ### 前端

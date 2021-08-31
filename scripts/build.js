@@ -78,7 +78,8 @@ async function build() {
   if (isProd) {
     if (isBuildStatic) {
       await Vite.build(configs.static(define));
-      await requireTs("scripts/prerender.ts");
+      const { ssg } = await requireTs("scripts/prerender.ts");
+      await ssg();
     }
 
     if (isBuildServer) {
@@ -87,9 +88,6 @@ async function build() {
       }
       if (isSSR) {
         await Vite.build(configs.entryServer());
-        const loader = await requireTs("scripts/loader.ts");
-        const ssrPages = loader.loadPages(Cwd("src/pages"));
-        fs.writeJSONSync(Cwd("dist/server/ssr-pages.json"), ssrPages, { spaces: 2 });
       }
       copyPackage();
       copyFiles([".env", "pnpm-lock.yaml", "yarn.lock", "package-lock.json"]);

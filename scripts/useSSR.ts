@@ -1,45 +1,39 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { FastifyInstance } from "fastify";
 import fs from "fs-extra";
-import { parseURL } from "./parser";
-import { loadPages, Cwd, Dir } from "./loader";
-
-function useStatic(app: FastifyInstance) {
-  app.register(require("fastify-compress"), { global: false });
-  const staticPath = Dir("static");
-  if (fs.existsSync(staticPath)) {
-    app.register(require("fastify-static"), {
-      root: staticPath,
-      prefix: "/",
-    });
-  }
-}
+import { parseURL } from "./parsers";
+import { loadPages, loadStaticRoutes, loadFastifyStatic, Cwd, Dir } from "./loaders";
+import "./proxyFetch";
 
 export const useSSR = async (app: FastifyInstance) => {
-  if (process.env.BUILD === "ssr" || process.env.USE_SSR === "ssg") {
-    useStatic(app);
+  const isProd = process.env.NODE_ENV === "production";
+
+  if (isProd) {
+    if (process.env.BUILD === "ssr") {
+      loadFastifyStatic(app);
+    } else if (process.env.BUILD === "ssg") {
+      loadFastifyStatic(app, true);
+    }
   }
   if (process.env.BUILD !== "ssr") {
     return;
   }
-  const isProd = process.env.NODE_ENV === "production";
   const indexProd = isProd ? fs.readFileSync(Dir("static/index.html"), "utf-8") : "";
   let baseHTML: string;
-  let routers: string[] = [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let render: any;
+  let routers: string[];
   await app.register(require("middie"));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let vite: any;
   if (isProd) {
-    routers = require(Dir("ssr-pages.json"));
+    routers = loadStaticRoutes();
     render = require(Dir("entry-server.js")).render;
   } else {
-    const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vite = await (require as any)("vite").createServer({
       root: process.cwd(),
-      logLevel: isTest ? "error" : "info",
+      logLevel: "error",
       server: {
         middlewareMode: "ssr",
         watch: {
@@ -58,7 +52,7 @@ export const useSSR = async (app: FastifyInstance) => {
     (app as any).use(vite.middlewares);
   }
   routers.map(parseURL).forEach((url) => {
-    app.get(url, async (req, res) => {
+    app.get(url, async (req, reply) => {
       try {
         const url = req.url;
 
@@ -69,21 +63,32 @@ export const useSSR = async (app: FastifyInstance) => {
           template = await vite.transformIndexHtml(url, baseHTML);
         }
         const context: { url?: string } = {};
-        const appHtml = render(parseURL(url), context);
 
-        if (context.url) {
+        const appHtml = await render(parseURL(url), context, {
+          headers: req.headers,
+          query: req.query,
+          params: req.params,
+          ips: req.ips,
+          ip: req.ip,
+          hostname: req.hostname,
+          url: req.url,
+          protocol: req.protocol,
+          routerPath: req.routerPath,
+        });
+
+        if (isProd && context.url) {
           // Somewhere a `<Redirect>` was rendered
-          return res.redirect(301, context.url);
+          return reply.redirect(301, context.url);
         }
         const html = template.replace(`<!--app-html-->`, appHtml);
-        res.status(200).headers({ "Content-Type": "text/html" }).send(html);
+        reply.status(200).headers({ "Content-Type": "text/html" }).send(html);
       } catch (e) {
         if (!isProd) {
           vite.ssrFixStacktrace(e);
         }
         console.log(e.stack);
         // res.status(500).end(e.stack);
-        res.status(500).send(e.stack);
+        reply.status(500).send(e.stack);
       }
     });
   });

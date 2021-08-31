@@ -28,8 +28,10 @@ export function parsePages(data: any) {
       return true;
     })
     .map((v) => {
+      const path = "/" + parseURL(v);
       return {
-        path: "/" + parseURL(v),
+        path,
+        routerPath: path.split("?")[0],
         key: v,
       };
     });
