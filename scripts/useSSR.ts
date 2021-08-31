@@ -5,6 +5,15 @@ import { parseURL } from "./parsers";
 import { loadPages, loadStaticRoutes, loadFastifyStatic, Cwd, Dir } from "./loaders";
 import "./proxyFetch";
 
+// const stataicCache = {} as Record<string, string>;
+// const getStaticHTML = (url: string) => {
+//   if (stataicCache[url]) {
+//     return stataicCache[url];
+//   }
+//   stataicCache[url] = fs.readFileSync(Dir(`static/${url}.html`), "utf-8");
+//   return stataicCache[url];
+// };
+
 export const useSSR = async (app: FastifyInstance) => {
   const isProd = process.env.NODE_ENV === "production";
 
@@ -18,11 +27,11 @@ export const useSSR = async (app: FastifyInstance) => {
   if (process.env.BUILD !== "ssr") {
     return;
   }
-  const indexProd = isProd ? fs.readFileSync(Dir("static/index.html"), "utf-8") : "";
   let baseHTML: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let render: any;
   let routers: string[];
+  const indexTemp = isProd ? fs.readFileSync(Dir(`static/__tmp__.html`), "utf-8") : "";
   await app.register(require("middie"));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let vite: any;
@@ -49,20 +58,22 @@ export const useSSR = async (app: FastifyInstance) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (app as any).use(vite.middlewares);
   }
+
   routers.map(parseURL).forEach((url) => {
     app.get(url, async (req, reply) => {
       try {
         const url = req.url;
+        const parsededURL = parseURL(url);
 
         let template: string;
         if (isProd) {
-          template = indexProd;
+          template = indexTemp;
         } else {
           template = await vite.transformIndexHtml(url, baseHTML);
         }
         const context: { url?: string } = {};
 
-        const appHtml = await render(parseURL(url), context, {
+        const appHtml = await render(parsededURL, context, {
           query: req.query,
           routerPath: req.routerPath,
         });

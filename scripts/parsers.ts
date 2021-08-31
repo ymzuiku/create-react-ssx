@@ -9,7 +9,8 @@ export function parseURL(name: string) {
   if (list.length && list[list.length - 1] === "index") {
     list.pop();
   }
-  return list.join("/").toLocaleLowerCase();
+  const url = list.join("/").toLocaleLowerCase();
+  return url.split("?")[0];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

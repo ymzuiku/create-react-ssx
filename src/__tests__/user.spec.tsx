@@ -4,6 +4,6 @@ import User from "../pages/user";
 
 test("renders learn react link", () => {
   render(<User />);
-  const linkElement = screen.getByText(/use react testing/i);
+  const linkElement = screen.getByText(/ssr props/i);
   expect(linkElement).toBeInTheDocument();
 });

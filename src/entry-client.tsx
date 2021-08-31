@@ -14,44 +14,36 @@ if (ssrEle) {
   serverSideProps = JSON.parse(ssrEle.innerText);
 }
 
-const routeMap: Record<
-  string,
-  {
-    path: string;
-    routerPath: string;
-    lazyFn: () => Promise<{ default: React.FC }>;
-    Component: React.FC;
-    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
-  }
-> = {};
+const lazyFn = {} as Record<string, (props: unknown) => Promise<unknown>>;
+
+const fisrtInRoutes = {} as Record<string, boolean>;
 
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
-  const lazyFn = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { default: Component, getServerSideProps } = await (pages[key] as any)();
-    // const ssrProps = serverSideProps[window.location.pathname];
-    // if (ssrProps) {
-    //   return {
-    //     default: () => Component({ ...ssrProps, bySSR: true }),
-    //   };
-    // }
-    if (getServerSideProps) {
-      const nowProps = await getServerSideProps(parseSearch(window.location.search), window.location.pathname);
-      return {
-        default: (props: Record<string, unknown>) => Component({ ...props, ...nowProps }),
-      };
-    }
-    return {
-      default: Component,
-    };
-  };
-  routeMap[path] = {
+  lazyFn[path] = pages[key];
+  return {
     path,
     routerPath,
-    lazyFn,
-    Component: lazy(lazyFn),
+    Component: lazy(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { default: Component, getServerSideProps } = await (pages[key] as any)();
+      const ssrProps = serverSideProps[window.location.pathname];
+      if (!fisrtInRoutes[path] && ssrProps) {
+        fisrtInRoutes[path] = true;
+        return {
+          default: () => Component({ ...ssrProps, bySSR: true }),
+        };
+      }
+      if (getServerSideProps) {
+        const nowProps = await getServerSideProps(parseSearch(window.location.search), window.location.pathname);
+        return {
+          default: (props: Record<string, unknown>) => Component({ ...props, ...nowProps }),
+        };
+      }
+      return {
+        default: Component,
+      };
+    }),
   };
-  return routeMap[path];
 });
 
 function render() {
@@ -64,8 +56,8 @@ function render() {
   );
 }
 
-if (routeMap[window.location.pathname]) {
-  Promise.resolve(routeMap[window.location.pathname].lazyFn()).then(render);
+if (lazyFn[window.location.pathname]) {
+  Promise.resolve(lazyFn[window.location.pathname]({})).then(render);
 } else {
   render();
 }

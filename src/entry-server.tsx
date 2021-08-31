@@ -37,12 +37,13 @@ export async function render(
     const route = routeMap[req.routerPath];
     if (route && route.getServerSideProps) {
       serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
+      console.log("ssr load", serverSideProps[req.routerPath]);
     }
   }
 
   return ReactDOMServer.renderToString(
     <div>
-      {req && (
+      {isProd && req && (
         <div id="ssr-props" style={{ display: "none" }}>
           {JSON.stringify(serverSideProps)}
         </div>
