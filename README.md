@@ -50,7 +50,7 @@ npm install
 - npm run build:ssg : 前端预编译(SSG) 并且拷贝静态资源到服务端
 - npm run build:server : 编译生产的纯后端
 - npm run build:static : 前端预编译(SSG)
-- npm run server : 启动服务
+- npm run server : 预览遍以后的服务
 
 ## Deploy
 
