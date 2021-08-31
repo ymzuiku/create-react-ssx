@@ -31,7 +31,7 @@ worker.addListener('close', (code)=>{
     fs.rmSync(Cwd(dir, "packages"), {recursive: true, force: true})
     fs.rmSync(Cwd(dir, "pnpm-lock.yaml"), {recursive: true, force: true})
     console.log(" ")
-    console.log("Create react SSX Done! Please go on:")
+    console.log("Create Project Done! Please go on:")
     console.log(`cd ${dir} && npm install`)
   }
 })
