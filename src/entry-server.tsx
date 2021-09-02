@@ -4,7 +4,6 @@ import { StaticRouter } from "react-router-dom";
 import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
 import { parsePages } from "../scripts/parsers";
-// import loadable from "react-loadable-visibility/loadable-components";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -38,12 +37,6 @@ export async function render(
 ) {
   if (isProd && req) {
     const route = routeMap[req.routerPath];
-    // if (route) {
-    //   const { getServerSideProps } = await Promise.resolve(route.loader());
-    //   if (getServerSideProps) {
-    //     serverSideProps[req.routerPath] = await Promise.resolve(getServerSideProps(req.query, req.routerPath));
-    //   }
-    // }
     if (route && route.getServerSideProps) {
       serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
     }

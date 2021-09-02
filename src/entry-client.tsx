@@ -57,7 +57,6 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
 });
 
 function render() {
-  // return;
   hydrate(
     <BrowserRouter>
       <App routes={routes} serverSideProps={serverSideProps} />

@@ -1,11 +1,9 @@
 // Pre-render the app into static HTML.
-// run `yarn generate` and then `dist/static` can be served as a static site.
 import fs from "fs-extra";
 import path from "path";
 import { parseURL } from "./parsers";
 import { loadPages, Cwd } from "./loaders";
 import { render } from "../src/entry-server";
-// const { render } = require(toAbsolute("node_modules/.ssr/entry-server.js"));
 
 const distPath = "dist/static";
 const template = fs.readFileSync(Cwd(distPath + "/index.html"), "utf-8");

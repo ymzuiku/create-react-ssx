@@ -5,15 +5,6 @@ import { parseURL } from "./parsers";
 import { loadPages, loadStaticRoutes, loadFastifyStatic, Cwd, Dir } from "./loaders";
 import "./proxyFetch";
 
-// const stataicCache = {} as Record<string, string>;
-// const getStaticHTML = (url: string) => {
-//   if (stataicCache[url]) {
-//     return stataicCache[url];
-//   }
-//   stataicCache[url] = fs.readFileSync(Dir(`static/${url}.html`), "utf-8");
-//   return stataicCache[url];
-// };
-
 export const useSSR = async (app: FastifyInstance) => {
   const isProd = process.env.NODE_ENV === "production";
 
