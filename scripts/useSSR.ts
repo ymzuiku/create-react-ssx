@@ -75,7 +75,7 @@ export const useSSR = async (app: FastifyInstance) => {
         if (isProd && context.url) {
           return reply.redirect(301, context.url);
         }
-        const html = template.replace(`<!--app-html-->`, appHtml).replace("<!--ssr-props-->", ssrProps);
+        const html = template.replace(`<!--app-html-->`, appHtml).replace("<!--app-ssr-->", ssrProps);
         reply.status(200).headers({ "Content-Type": "text/html" }).send(html);
       } catch (e) {
         if (!isProd) {
