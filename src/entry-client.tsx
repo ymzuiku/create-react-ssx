@@ -1,44 +1,59 @@
-import "./assets/tailwind.css";
 import { hydrate } from "react-dom";
-import { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages, parseSearch } from "../scripts/parsers";
 
 const pages = import.meta.glob("./pages/**/*.tsx");
+const basePath = window.location.pathname;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const serverSidePropsString = (window as any).serverSideProps;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const serverSideProps: any = serverSidePropsString ? JSON.parse(serverSidePropsString) : {};
+const serverSideProps: any = (window as any).serverSideProps || {};
 
-const lazyFn = {} as Record<string, (props: unknown) => Promise<unknown>>;
+const HOCSuspense = (path: string, Component: React.FC): React.FC => {
+  if (path === basePath) {
+    return Component;
+  }
+  return ((props: never) =>
+    Suspense({ children: Component(props), fallback: <div style={{ all: "unset" }}></div> })) as React.FC;
+};
 
+const routerMap = {} as Record<
+  string,
+  {
+    path: string;
+    loader: () => Promise<{ default: React.FC }>;
+    routerPath: string;
+    Component: React.FC;
+    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
+  }
+>;
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
-  lazyFn[path] = pages[key];
-  return {
+  routerMap[path] = {
     path,
+    loader: pages[key] as never,
     routerPath,
-    Component: lazy(async () => {
+    Component: lazy((async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { default: Component, getServerSideProps } = await (pages[key] as any)();
       const ssrProps = serverSideProps[window.location.pathname];
       if (ssrProps) {
         return {
-          default: () => Component(ssrProps),
+          default: (props: Record<string, unknown>) => HOCSuspense(path, Component({ ...props, ...ssrProps })),
         };
       }
       if (getServerSideProps) {
         const nowProps = await getServerSideProps(parseSearch(window.location.search), window.location.pathname);
         return {
-          default: (props: Record<string, unknown>) => Component({ ...props, ...nowProps }),
+          default: (props: Record<string, unknown>) => HOCSuspense(path, Component({ ...props, ...nowProps })),
         };
       }
       return {
-        default: Component,
+        default: HOCSuspense(path, Component),
       };
-    }),
+    }) as never) as React.FC,
   };
+  return routerMap[path];
 });
 
 function render() {
@@ -51,8 +66,12 @@ function render() {
   );
 }
 
-if (lazyFn[window.location.pathname]) {
-  Promise.resolve(lazyFn[window.location.pathname]({})).then(render);
+if (routerMap[basePath]) {
+  const route = routerMap[basePath];
+  route.loader().then((page) => {
+    route.Component = page.default;
+    render();
+  });
 } else {
   render();
 }

@@ -45,7 +45,7 @@ export async function ssg() {
 
   for (const url of routesToPrerender) {
     const context = {};
-    const appHtml = await render(parseURL(url), context);
+    const [appHtml] = await render(parseURL(url), context);
     const html = template.replace(`<!--app-html-->`, appHtml);
     const filePath = `${distPath}${url}.html`;
     fs.writeFileSync(Cwd(filePath), html);
