@@ -52,7 +52,6 @@ export function loadFastifyStatic(app: FastifyInstance, globHtml?: boolean) {
     app.register(require("fastify-compress"), { global: false });
     app.register(require("fastify-static"), {
       root: staticPath,
-      ignoreTrailingSlash: true,
       prefix: "/",
     });
     if (globHtml) {

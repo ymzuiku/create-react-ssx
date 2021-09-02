@@ -14,8 +14,13 @@ const HOCSuspense = (path: string, Component: React.FC): React.FC => {
   if (path === basePath) {
     return Component;
   }
-  return ((props: never) =>
-    Suspense({ children: Component(props), fallback: <div style={{ all: "unset" }}></div> })) as React.FC;
+  return function LazyRoute(props: Record<string, unknown>) {
+    return (
+      <Suspense fallback={<div style={{ all: "unset" }}></div>}>
+        <Component {...props}></Component>
+      </Suspense>
+    );
+  };
 };
 
 const routerMap = {} as Record<
@@ -29,29 +34,33 @@ const routerMap = {} as Record<
   }
 >;
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const page = pages[key] as any;
   routerMap[path] = {
     path,
-    loader: pages[key] as never,
+    loader: page,
     routerPath,
-    Component: lazy((async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { default: Component, getServerSideProps } = await (pages[key] as any)();
-      const ssrProps = serverSideProps[window.location.pathname];
-      if (ssrProps) {
+    Component: HOCSuspense(
+      path,
+      lazy((async () => {
+        const { default: Component, getServerSideProps } = await page();
+        const ssrProps = serverSideProps[window.location.pathname];
+        if (ssrProps) {
+          return {
+            default: (props: Record<string, unknown>) => Component({ ...props, ...ssrProps }),
+          };
+        }
+        if (getServerSideProps) {
+          const nowProps = await getServerSideProps(parseSearch(window.location.search), window.location.pathname);
+          return {
+            default: (props: Record<string, unknown>) => Component({ ...props, ...nowProps }),
+          };
+        }
         return {
-          default: (props: Record<string, unknown>) => HOCSuspense(path, Component({ ...props, ...ssrProps })),
+          default: Component,
         };
-      }
-      if (getServerSideProps) {
-        const nowProps = await getServerSideProps(parseSearch(window.location.search), window.location.pathname);
-        return {
-          default: (props: Record<string, unknown>) => HOCSuspense(path, Component({ ...props, ...nowProps })),
-        };
-      }
-      return {
-        default: HOCSuspense(path, Component),
-      };
-    }) as never) as React.FC,
+      }) as never) as React.FC,
+    ),
   };
   return routerMap[path];
 });
