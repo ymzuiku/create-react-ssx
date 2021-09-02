@@ -58,6 +58,7 @@ npm install
 2. 注意 getServerSideProps 不仅在 SSR 模式中生效，在 SSG (静态预渲染) 中会阻塞组件渲染，直到拿到数据。
 3. getServerSideProps 的数据仅在 SSR 时或组件第一次渲染时执行一次，它并不适合做客户端动态更新的请求
 4. 在开发模式中 getServerSideProps 永远都从前端获取数据；(原因：为了更高效的开发环境，前端热更新和后端热重启是分离的，getServerSideProps 的代码在前端代码中，而实际执行在后端代码中).
+5. getServerSideProps 的入参仅有 URL 相关数据，其目的是为了 getServerSideProps 兼容未使用 SSR 时，可以在前端获取 BFF 端的数据
 
 ```tsx
 export const getServerSideProps = async (req: GetServerSideRequire) => {
