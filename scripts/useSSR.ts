@@ -30,10 +30,13 @@ export const useSSR = async (app: FastifyInstance) => {
     routers = loadStaticRoutes();
     render = require(Dir("entry-server.js")).render;
   } else {
+    const reactJsx = require("vite-react-jsx").default;
+    const reactRefresh = require("@vitejs/plugin-react-refresh").default;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vite = await (require as any)("vite").createServer({
       root: process.cwd(),
       logLevel: "error",
+      plugins: [reactRefresh(), reactJsx()],
       server: {
         middlewareMode: "ssr",
         watch: {

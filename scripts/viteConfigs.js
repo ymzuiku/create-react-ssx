@@ -1,6 +1,7 @@
 const Vite = require("vite");
 const reactJsx = require("vite-react-jsx").default;
 const reactRefresh = require("@vitejs/plugin-react-refresh").default;
+const viteImagemin = require("vite-plugin-imagemin");
 const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
@@ -105,6 +106,37 @@ exports.entryServer = (define) =>
 exports.static = () =>
   Vite.defineConfig({
     root: cwd,
+    plugins: [
+      reactRefresh(),
+      reactJsx(),
+      viteImagemin({
+        gifsicle: {
+          optimizationLevel: 7,
+          interlaced: false,
+        },
+        optipng: {
+          optimizationLevel: 7,
+        },
+        mozjpeg: {
+          quality: 20,
+        },
+        pngquant: {
+          quality: [0.8, 0.9],
+          speed: 4,
+        },
+        svgo: {
+          plugins: [
+            {
+              name: "removeViewBox",
+            },
+            {
+              name: "removeEmptyAttrs",
+              active: false,
+            },
+          ],
+        },
+      }),
+    ],
     mode,
     logLevel: "info",
     build: {

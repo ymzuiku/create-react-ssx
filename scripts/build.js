@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const Vite = require("vite");
 const path = require("path");
 const fs = require("fs-extra");
