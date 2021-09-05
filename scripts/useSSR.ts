@@ -77,7 +77,8 @@ export const useSSR = async (app: FastifyInstance) => {
         }
         const html = template.replace(`<!--app-html-->`, appHtml).replace("<!--app-ssr-->", ssrProps);
         reply.status(200).headers({ "Content-Type": "text/html" }).send(html);
-      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
         if (!isProd) {
           vite.ssrFixStacktrace(e);
         }

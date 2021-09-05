@@ -5,6 +5,7 @@ const viteImagemin = require("vite-plugin-imagemin");
 const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
+const serverIndex = "server/index.ts";
 
 exports.serverDev = (define) =>
   Vite.defineConfig({
@@ -22,7 +23,7 @@ exports.serverDev = (define) =>
       lib: {
         name: "server-dev",
         formats: ["cjs"],
-        entry: "server/index.ts",
+        entry: serverIndex,
       },
       outDir: "dist/server-dev",
       emptyOutDir: true,
@@ -48,7 +49,7 @@ exports.server = (define) =>
       lib: {
         name: "server",
         formats: ["cjs"],
-        entry: "server/index.ts",
+        entry: serverIndex,
       },
       outDir: "dist/server",
       emptyOutDir: true,
