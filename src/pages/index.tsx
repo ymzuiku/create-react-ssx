@@ -1,5 +1,3 @@
-import "../assets/tailwind.css";
-
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
