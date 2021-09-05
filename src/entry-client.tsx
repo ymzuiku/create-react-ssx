@@ -1,9 +1,10 @@
-import { hydrate } from "react-dom";
+import { hydrate, render } from "react-dom";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages, parseSearch } from "../scripts/parsers";
 
+const isProd = process.env.NODE_ENV === "production";
 const pages = import.meta.glob("./pages/**/*.tsx");
 const basePath = window.location.pathname;
 
@@ -65,8 +66,9 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
   return routerMap[path];
 });
 
-function render() {
-  hydrate(
+function inject() {
+  const theRender = isProd ? hydrate : render;
+  theRender(
     <BrowserRouter>
       <App routes={routes} serverSideProps={serverSideProps} />
     </BrowserRouter>,
@@ -78,8 +80,8 @@ if (routerMap[basePath]) {
   const route = routerMap[basePath];
   route.loader().then((page) => {
     route.Component = page.default;
-    render();
+    inject();
   });
 } else {
-  render();
+  inject();
 }

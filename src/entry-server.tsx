@@ -5,8 +5,6 @@ import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
 import { parsePages } from "../scripts/parsers";
 
-const isProd = process.env.NODE_ENV === "production";
-
 const pages = import.meta.globEager("./pages/**/*.tsx");
 const routeMap: Record<
   string,
@@ -35,7 +33,7 @@ export async function render(
   context: StaticRouterContext,
   req?: { routerPath: string; query: Record<string, unknown> },
 ) {
-  if (isProd && req) {
+  if (req) {
     const route = routeMap[req.routerPath];
     if (route && route.getServerSideProps) {
       serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
