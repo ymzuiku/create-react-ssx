@@ -79,6 +79,22 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
 - 确保 package.json 中 dependencies 均为纯后端依赖(若你使用 SSR，那么前端依赖也应该放到 dependencies 中)；同理，后端生产用不上的依赖应该放到 devDependencies 中
 - 拷贝 dist/server 到生产服务器中，然后执行进入到目录中安装依赖即可
 
+## 在历史 create-react-ssx 项目中更新版本
+
+create-react-ssx 所有的逻辑都编写在 scripts 中，你可以从新的 create-react-ssx 拷贝 scripts 文件覆盖你当前工程的对应文件。有一个相关的命令帮忙做以上的事情：
+
+```bash
+# 在一个 create-react-ssx 工程中使用：
+create-react-ssx --update
+# 安装新依赖（若 package.json 有依赖变动）
+npm run install
+```
+
+`--update` 命令一共做了两件事情：
+
+1. 备份历史的 scripts 文件夹，并且下载新的 scripts 文件夹
+2. 更新 package.json 中和新 create-react-ssx 相关的依赖
+
 ## 已知问题
 
 - 前端测试文件请勿放到 src/pages 中，这会导致 vite 的 import.meta.globEage 加载测试文件从而编译失败
