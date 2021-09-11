@@ -98,4 +98,4 @@ npm run install
 
 ## 已知问题
 
-- 由于 vite 的 import.meta.globEage 暂时没有暴露排除 API，前端测试文件请以 .ts 结尾，而不是以 .tsx
+- 由于 vite 的 import.meta.globEage 暂时没有暴露排除 API，前端 pages 文件夹中的测试文件请以 .ts 结尾，而不是以 .tsx
