@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import type { StaticRouterContext } from "react-router";
-import { App } from "./App";
+import { App } from "./app";
 import { parsePages } from "./parsers";
 
 const pages = import.meta.globEager("../pages/**/*.tsx");

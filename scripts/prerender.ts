@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import path from "path";
 import { parseURL } from "./parsers";
 import { Cwd, loadPages } from "./loaders";
-import { render } from "./entry-server";
+import { render } from "./appServer";
 
 const distPath = "dist/static";
 const template = fs.readFileSync(Cwd(distPath + "/index.html"), "utf-8");

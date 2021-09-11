@@ -28,7 +28,7 @@ export const useSSR = async (app: FastifyInstance) => {
   let vite: any;
   if (isProd) {
     routers = loadStaticRoutes();
-    render = require(Dir("entry-server.js")).render;
+    render = require(Dir("appServer.js")).render;
   } else {
     const reactJsx = require("vite-react-jsx").default;
     const reactRefresh = require("@vitejs/plugin-react-refresh").default;
@@ -47,7 +47,7 @@ export const useSSR = async (app: FastifyInstance) => {
     });
 
     routers = loadPages(Cwd("pages"));
-    render = (await vite.ssrLoadModule("scripts/entry-server.tsx")).render;
+    render = (await vite.ssrLoadModule("scripts/appServer.tsx")).render;
     baseHTML = fs.readFileSync(Cwd("index.html"), "utf-8");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (app as any).use(vite.middlewares);

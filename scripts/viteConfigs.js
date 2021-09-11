@@ -94,9 +94,9 @@ exports.entryServer = (define) =>
       target: "es6",
       brotliSize: false,
       lib: {
-        name: "entry-server",
+        name: "appServer",
         formats: ["cjs"],
-        entry: "scripts/entry-server.tsx",
+        entry: "scripts/appServer.tsx",
       },
       emptyOutDir: false,
       outDir: "dist/server",
