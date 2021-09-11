@@ -17,9 +17,6 @@ export default function Index() {
         </button>
       </div>
       <Cell />
-      <Cell />
-      <Cell />
-      <Cell />
     </div>
   );
 }
@@ -89,7 +86,7 @@ function Cell() {
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">雷同 Next 的约定路由</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
-                  src/pages 下所有 *.tsx 文件均为页面组件, 文件名为 `_` 开头的除外
+                  pages 下所有 *.tsx 文件均为页面组件, 文件名为 `_` 开头的除外
                 </dd>
               </div>
 

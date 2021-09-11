@@ -2,7 +2,7 @@
 import type { FastifyInstance } from "fastify";
 import fs from "fs-extra";
 import { parseURL } from "./parsers";
-import { loadPages, loadStaticRoutes, loadFastifyStatic, Cwd, Dir } from "./loaders";
+import { Cwd, Dir, loadFastifyStatic, loadPages, loadStaticRoutes } from "./loaders";
 import "./proxyFetch";
 
 export const useSSR = async (app: FastifyInstance) => {
@@ -46,8 +46,8 @@ export const useSSR = async (app: FastifyInstance) => {
       },
     });
 
-    routers = loadPages(Cwd("src/pages"));
-    render = (await vite.ssrLoadModule("src/entry-server.tsx")).render;
+    routers = loadPages(Cwd("pages"));
+    render = (await vite.ssrLoadModule("scripts/entry-server.tsx")).render;
     baseHTML = fs.readFileSync(Cwd("index.html"), "utf-8");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (app as any).use(vite.middlewares);

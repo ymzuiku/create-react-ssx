@@ -10,7 +10,7 @@ const Cwd = (...args) => path.resolve(process.cwd(), ...args);
 const isProd = process.env.NODE_ENV === "production";
 
 function checkIsSSR() {
-  const isHaveSrc = fs.existsSync(Cwd("src")) && fs.existsSync(Cwd("index.html"));
+  const isHaveSrc = fs.existsSync(Cwd("pages")) && fs.existsSync(Cwd("index.html"));
   if (!isHaveSrc) {
     return false;
   }

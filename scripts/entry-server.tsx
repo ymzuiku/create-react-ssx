@@ -3,9 +3,9 @@ import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
-import { parsePages } from "../scripts/parsers";
+import { parsePages } from "./parsers";
 
-const pages = import.meta.globEager("./pages/**/*.tsx");
+const pages = import.meta.globEager("../pages/**/*.tsx");
 const routeMap: Record<
   string,
   {

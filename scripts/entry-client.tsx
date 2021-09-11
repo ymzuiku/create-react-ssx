@@ -2,10 +2,10 @@ import { hydrate, render } from "react-dom";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
-import { parsePages, parseSearch } from "../scripts/parsers";
+import { parsePages, parseSearch } from "./parsers";
 
 const isProd = process.env.NODE_ENV === "production";
-const pages = import.meta.glob("./pages/**/*.tsx");
+const pages = import.meta.glob("../pages/**/*.tsx");
 const basePath = window.location.pathname;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

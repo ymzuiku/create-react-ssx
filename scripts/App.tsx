@@ -1,4 +1,4 @@
-import "./assets/tailwind.css";
+import "./tailwind.css";
 import { Route, Switch } from "react-router-dom";
 
 export interface AppProps {

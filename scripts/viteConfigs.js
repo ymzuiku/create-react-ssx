@@ -96,7 +96,7 @@ exports.entryServer = (define) =>
       lib: {
         name: "entry-server",
         formats: ["cjs"],
-        entry: "src/entry-server.tsx",
+        entry: "scripts/entry-server.tsx",
       },
       emptyOutDir: false,
       outDir: "dist/server",

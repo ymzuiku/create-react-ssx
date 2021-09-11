@@ -2,8 +2,8 @@
 import fs from "fs-extra";
 import path from "path";
 import { parseURL } from "./parsers";
-import { loadPages, Cwd } from "./loaders";
-import { render } from "../src/entry-server";
+import { Cwd, loadPages } from "./loaders";
+import { render } from "./entry-server";
 
 const distPath = "dist/static";
 const template = fs.readFileSync(Cwd(distPath + "/index.html"), "utf-8");
@@ -33,7 +33,7 @@ export async function ssg() {
   removeGlob("window");
   removeGlob("document");
 
-  const routesToPrerender = loadPages(Cwd("src/pages"));
+  const routesToPrerender = loadPages(Cwd("pages"));
   routesToPrerender.forEach((v) => {
     const real = Cwd(distPath, v.replace("/", ""));
     fs.mkdirpSync(path.parse(real).dir);
