@@ -49,7 +49,7 @@ worker.addListener("close", (code) => {
     fs.rmSync(Cwd(dir, "ssx-logo.svg"), { recursive: true, force: true });
     console.log(" ");
     console.log("Create Project Done! Please go on:");
-    console.log(`cd ${dir} && npm install`);
+    console.log(`cd ${dir} && npm install (We like: pnpm install)`);
     if (dir === "updateby-create-react-ssx") {
       const oldPkg = require(Cwd("package.json"));
       const newPkg = require(Cwd(dir, "package.json"));

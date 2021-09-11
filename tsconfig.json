@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["pages", "./server", "./scripts"]
+  "include": ["routers", "apis", "./scripts"]
 }
