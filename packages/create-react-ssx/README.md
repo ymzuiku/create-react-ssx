@@ -1,4 +1,5 @@
-<img src="logo.svg" alt="create-react-ssx">
+<img src="ssx-logo.svg" alt="create-react-ssx">
+
 # create-react-ssx
 
 这是一个 React + Vite + Fastify 的全栈项目，支持 SSR，同时并且可以很好的分离编译前后端代码（SSG）。后端仅仅是一个 fastify 的起步，足够轻量，你可以用此工程作为起点，开启你雄心勃勃的项目。
