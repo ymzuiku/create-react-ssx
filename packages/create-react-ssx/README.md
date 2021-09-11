@@ -1,3 +1,4 @@
+<img src="logo.svg" alt="create-react-ssx">
 # create-react-ssx
 
 这是一个 React + Vite + Fastify 的全栈项目，支持 SSR，同时并且可以很好的分离编译前后端代码（SSG）。后端仅仅是一个 fastify 的起步，足够轻量，你可以用此工程作为起点，开启你雄心勃勃的项目。
@@ -7,14 +8,14 @@
 这应该是截止到 2021 年 9 月 1 日，以 React 作为前端的 NodeJS 全栈方案，较为完整的起步工程
 
 - 支持 SSG / SSR
-- 类似 Next 的约定路由: src/pages 下所有 \*.tsx 文件均为页面组件, 文件或文件夹名以 `_` 开头的除外
+- 类似 Next 的约定路由: pages 下所有 \*.tsx 文件均为页面组件, 文件或文件夹名以 `_` 开头的除外
 - 自动懒加载 (开发环境不生效)
 - 支持 tailwind-jit
 - eslint + prettier
 - jest + esbuild
 - pre-commit 配置：格式化 prettier，校验 eslint，单元测试，均通过后才可提交
 - 支持服务端开发（服务端基于 cluster.fork 的热更新）
-- 可以单独仅开发后端服务, 只需要删除工程根目录下 src 和 index.html 即是一个单纯的后端项目
+- 可以单独仅开发后端服务, 只需要删除工程根目录下 pages 和 index.html 即是一个单纯的后端项目
 - 可以在开发模式中使用 SSR，编译时分别编译，既享有全栈的开发体验，又享有前后端分离的编译和部署
 
 ## FQA
@@ -97,4 +98,4 @@ npm run install
 
 ## 已知问题
 
-- 前端测试文件请勿放到 src/pages 中，这会导致 vite 的 import.meta.globEage 加载测试文件从而编译失败
+- 由于 vite 的 import.meta.globEage 暂时没有暴露排除 API，前端测试文件请以 .ts 结尾，而不是以 .tsx
