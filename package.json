@@ -69,7 +69,7 @@
     "useTabs": false
   },
   "lint-staged": {
-    "**/*.{tsx.ts}": "prettier --write --ignore-unknown",
+    "**/*": "prettier --write --ignore-unknown",
     "*.{tsx,ts}": "eslint --cache --fix"
   }
 }
