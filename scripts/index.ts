@@ -1,6 +1,5 @@
-import "./dotenv";
 import { fastify } from "fastify";
-import { useSSR } from "../scripts/useSSR";
+import { useSSR } from "./useSSR";
 const PORT = process.env.PORT || 3000;
 
 const app = fastify({});

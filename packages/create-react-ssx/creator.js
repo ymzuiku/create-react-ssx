@@ -61,6 +61,9 @@ worker.addListener("close", (code) => {
         ...oldPkg.devDependencies,
         ...newPkg.devDependencies,
       };
+      if (!oldPkg.serverDir) {
+        oldPkg.serverDir = newPkg.serverDir;
+      }
       fs.writeFileSync(Cwd("package.json"), JSON.stringify(oldPkg, null, 2));
 
       fs.renameSync("scripts", "scripts_" + Date.now());

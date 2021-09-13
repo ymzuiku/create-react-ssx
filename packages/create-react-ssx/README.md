@@ -69,6 +69,13 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
 };
 ```
 
+## 进行后端开发
+
+后端的默认入口文件夹为 scripts，若您需要进行完整的后端开发，我们建议您做以下调整：
+
+1. 创建 server 文件夹，并把 `scripts/index.ts` 文件移动到 `server/index.ts` 中
+2. 修改 package.json 中的 serverDir，从 `scripts` 修改为 `server`
+
 ## Deploy
 
 ### 前端

@@ -5,7 +5,8 @@ const viteImagemin = require("vite-plugin-imagemin");
 const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
-const serverIndex = "server/index.ts";
+const pkg = require(cwd + "/package.json");
+const serverIndex = pkg.serverDir + "/index.ts";
 
 exports.serverDev = (define) =>
   Vite.defineConfig({
