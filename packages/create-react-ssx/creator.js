@@ -51,7 +51,7 @@ worker.addListener("close", (code) => {
     console.log("Create Project Done! Please go on:");
     console.log(`cd ${dir} && npm install (We like: pnpm install)`);
     if (dir === "updateby-create-react-ssx") {
-      const oldPkg = require(Cwd("package.json"));
+      let oldPkg = require(Cwd("package.json"));
       const newPkg = require(Cwd(dir, "package.json"));
       oldPkg.dependencies = {
         ...oldPkg.dependencies,
@@ -61,11 +61,19 @@ worker.addListener("close", (code) => {
         ...oldPkg.devDependencies,
         ...newPkg.devDependencies,
       };
+      if (JSON.stringify(oldPkg.scripts) !== JSON.stringify(newPkg.scripts)) {
+        oldPkg = {
+          scriptsByUpdate: newPkg.scripts,
+          ...oldPkg,
+        };
+      }
       if (!oldPkg.serverDir) {
-        oldPkg.serverDir = newPkg.serverDir;
+        oldPkg = {
+          serverDir: newPkg.serverDir,
+          ...oldPkg,
+        };
       }
       fs.writeFileSync(Cwd("package.json"), JSON.stringify(oldPkg, null, 2));
-
       fs.renameSync("scripts", "scripts_" + Date.now());
       copyFolderSync(Cwd(dir, "scripts"), Cwd("scripts"));
       fs.rmSync(Cwd(dir), { recursive: true, force: true });
