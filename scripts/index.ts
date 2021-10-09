@@ -11,7 +11,8 @@ async function start() {
   await useSSR(app);
   try {
     console.log(`http://localhost:${PORT}`);
-    await app.listen(PORT);
+    // 若你工作的网络环境不安全，请移除 public address
+    await app.listen(PORT, "0.0.0.0");
   } catch (err) {
     app.log.error(err);
     process.exit(1);

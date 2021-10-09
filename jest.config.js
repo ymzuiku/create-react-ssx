@@ -139,6 +139,7 @@ module.exports = {
     "/dist_serve/",
     "/coverage/",
     "/.vscode/",
+    "/logs/",
     "/.husky/",
     "/.public/",
     "/.scripts/",
