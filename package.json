@@ -70,7 +70,9 @@
     "useTabs": false
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
-    "*.{tsx,ts}": "eslint --cache --fix"
+    "pages/**/*": "prettier --write --ignore-unknown",
+    "scripts/**/*": "prettier --write --ignore-unknown",
+    "pages/**/*.{tsx,ts}": "eslint --cache --fix",
+    "scripts/**/*.{tsx,ts}": "eslint --cache --fix"
   }
 }

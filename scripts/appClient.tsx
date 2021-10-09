@@ -1,7 +1,7 @@
 import { hydrate, render } from "react-dom";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { App } from "./app";
+import { App } from "./app2";
 import { parsePages, parseSearch } from "./parsers";
 
 const isProd = process.env.NODE_ENV === "production";
