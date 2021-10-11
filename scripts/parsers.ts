@@ -23,9 +23,6 @@ export function parsePages(data: any) {
       if (/(\.test|_test|\.spec|_spce)/.test(v)) {
         return false;
       }
-      if (v.split("/").find((v) => v[0] === "_")) {
-        return false;
-      }
       return true;
     })
     .map((v) => {

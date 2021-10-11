@@ -12,7 +12,7 @@ export function loadPages(basePath: string) {
         if (file === ".DS_Store") {
           return;
         }
-        if (file[0] === "_" || /(\.test|\.spec|_test|_spec)/.test(file)) {
+        if (/(\.test|\.spec|_test|_spec)/.test(file)) {
           return;
         }
         const subDir = path.resolve(dir, file);
