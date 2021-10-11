@@ -5,7 +5,7 @@ import { App } from "./App";
 import { parsePages, parseSearch } from "./parsers";
 
 const isProd = process.env.NODE_ENV === "production";
-const pages = import.meta.glob("../pages/**/*[!.(spec|test)].tsx");
+const pages = import.meta.glob("../pages/**/[[:word:]]+.tsx");
 
 const basePath = window.location.pathname;
 
