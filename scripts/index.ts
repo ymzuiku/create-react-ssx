@@ -11,8 +11,7 @@ app.get("/ping", async (res) => {
 async function start() {
   await useSSR(app);
   try {
-    console.log(`http://localhost:${PORT}`);
-    console.log(`http://${getIPAddress()}:${PORT}`);
+    console.log(`http://localhost:${PORT} or http://${getIPAddress()}:${PORT}`);
     // 若你工作的网络环境不安全，请移除 public address
     await app.listen(PORT, "0.0.0.0");
   } catch (err) {
