@@ -104,6 +104,3 @@ npm run install
 1. 备份历史的 scripts 文件夹，并且下载新的 scripts 文件夹
 2. 更新 package.json 中和新 create-react-ssx 相关的依赖
 
-## 已知问题
-
-- 由于 vite 的 import.meta.globEage 暂时没有暴露排除 API，前端 pages 文件夹中的测试文件请以 .ts 结尾，而不是以 .tsx
