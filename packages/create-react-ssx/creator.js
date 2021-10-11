@@ -74,7 +74,9 @@ worker.addListener("close", (code) => {
         };
       }
       fs.writeFileSync(Cwd("package.json"), JSON.stringify(oldPkg, null, 2));
-      fs.renameSync("scripts", "scripts_" + Date.now());
+      if (fs.existsSync("scripts")) {
+        fs.renameSync("scripts", "scripts_" + Date.now());
+      }
       copyFolderSync(Cwd(dir, "scripts"), Cwd("scripts"));
       fs.rmSync(Cwd(dir), { recursive: true, force: true });
     }
