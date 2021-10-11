@@ -10,7 +10,7 @@
     "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build.js",
     "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build.js",
     "serve": "node dist/server",
-    "test": "jest --watch",
+    "test": "jest -c=scripts/jest.config.js --watch",
     "prepare": "husky install"
   },
   "dependencies": {
