@@ -86,7 +86,7 @@ SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增
 
 组件 `scripts/preload` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
 
-例子：
+直接预加载例子：
 
 ```tsx
 import { preload } from "../scripts/preload";
@@ -94,9 +94,18 @@ import { preload } from "../scripts/preload";
 export default function Home(){
   // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
   // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
-  // preload("/sub")
+  preload("/sub")
 
-  // 创建一个函数，在鼠标交互时只需
+  return <div>hello</div>
+}
+```
+
+交互加载例子：
+
+```tsx
+import { preload } from "../scripts/preload";
+
+export default function Home(){
   const handleLoadSubPage = () => preload("/sub");
 
   return <div>
@@ -108,6 +117,30 @@ export default function Home(){
         鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
       </button>
   </div>
+}
+```
+
+有规律的加载多个：
+
+```tsx
+import { preload } from "../scripts/preload";
+
+function usePreloads(){
+  // 假定我们需要加载 /a, /b, /c，在这些页面加载完了我们再加载 /big
+  Promise.all([
+    preload("/a"),
+    preload("/b"),
+    preload("/c"),
+  ]).then(() => {
+    preload("/big");
+  });
+}
+
+export default function Home(){
+  // 预加载多个页面
+  usePreloads();
+
+  return <div>hello</div>
 }
 ```
 

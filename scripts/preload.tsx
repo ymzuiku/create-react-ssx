@@ -18,10 +18,10 @@ export const preload = (url: string) => {
   if (preloadCache[url]) {
     return;
   }
-  const page = routeMap[url];
+  const page = routeMap[url.toLowerCase()];
   if (!page) {
     throw new Error(`${url} isn't Router`);
   }
-  page.load();
   preloadCache[url] = true;
+  return page.load();
 };
