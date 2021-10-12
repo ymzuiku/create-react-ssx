@@ -80,6 +80,38 @@ npm install
       states.ts // 这是页面的状态管理
 ```
 
+## 预先加载路由
+
+SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。
+
+组件 `scripts/preload` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
+
+例子：
+
+```tsx
+import { preload } from "../scripts/preload";
+
+export default function Home(){
+  // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
+  // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
+  // preload("/sub")
+
+  // 创建一个函数，在鼠标交互时只需
+  const handleLoadSubPage = () => preload("/sub");
+
+  return <div>
+          <button
+        className="bg-gray-200 p-2 m-3"
+        onMouseEnter={handleLoadSubPage}
+        onTouchStart={handleLoadSubPage}
+      >
+        鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
+      </button>
+  </div>
+}
+```
+
+
 ## SSR 获取数据
 
 1. 雷同 NextJS 的 `getServerSideProps` API, 在页面组建中，`export getServerSideProps` 方法，SSR 在渲染组件之前会先抓取数据，注入到页面的 Props 中
@@ -93,32 +125,6 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
   await new Promise((res) => setTimeout(res, 100));
   return { str: "user", dog: req.query.dog, query2: req.query };
 };
-```
-
-## 预先加载路由
-
-SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。
-
-组件 `scripts/preload` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
-
-例子：
-
-```tsx
-import { preload } from "../scripts/preload";
-
-export default function Home(){
-  const handleLoadSubPage = () => preload("/sub");
-
-  return <div>
-          <button
-        className="bg-gray-200 p-2 m-3"
-        onMouseEnter={handleLoadSubPage}
-        onTouchStart={handleLoadSubPage}
-      >
-        鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
-      </button>
-  </div>
-}
 ```
 
 ## 如何移除 tailwind 

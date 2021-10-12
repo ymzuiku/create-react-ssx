@@ -9,8 +9,13 @@ export const routeMap = {} as Record<
   }
 >;
 
+const preloadCache = {} as { [key: string]: boolean };
+
 export const preload = (url: string) => {
   if (typeof window === "undefined") {
+    return;
+  }
+  if (preloadCache[url]) {
     return;
   }
   const page = routeMap[url];
@@ -18,4 +23,5 @@ export const preload = (url: string) => {
     throw new Error(`${url} isn't Router`);
   }
   page.load();
+  preloadCache[url] = true;
 };
