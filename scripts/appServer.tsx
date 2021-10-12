@@ -5,7 +5,8 @@ import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
 import { parsePages } from "./parsers";
 
-const pages = import.meta.globEager("../pages/**/[[:word:]]+.tsx");
+// const pages = import.meta.globEager("../pages/**/[[:word:]]+.tsx");
+const pages = import.meta.globEager("../pages/**/index.tsx");
 
 const routeMap: Record<
   string,

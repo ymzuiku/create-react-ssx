@@ -9,15 +9,12 @@ export function loadPages(basePath: string) {
     fs.readdirSync(dir)
       .filter((v) => !/\.(css|json|md|go)/.test(v))
       .forEach((file) => {
-        if (file === ".DS_Store") {
-          return;
-        }
-        if (/(\.test|\.spec|_test|_spec)/.test(file)) {
-          return;
-        }
         const subDir = path.resolve(dir, file);
         if (fs.statSync(subDir).isDirectory()) {
           fixPagesRouter(subDir);
+          return;
+        }
+        if (!/index\.tsx/.test(file)) {
           return;
         }
         let name = file.replace(/\.tsx$/, "").toLowerCase();

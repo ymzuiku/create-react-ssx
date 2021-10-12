@@ -17,10 +17,7 @@ export function parseURL(name: string) {
 export function parsePages(data: any) {
   return Object.keys(data)
     .filter((v) => {
-      if (!/\.tsx$/.test(v)) {
-        return false;
-      }
-      if (/(\.test|_test|\.spec|_spce)/.test(v)) {
+      if (!/index\.tsx$/.test(v)) {
         return false;
       }
       return true;
