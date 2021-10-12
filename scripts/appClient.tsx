@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages, parseSearch } from "./parsers";
-import { routeMap } from "./routeMap";
+import { routeMap } from "./preload";
 
 const isProd = process.env.NODE_ENV === "production";
 const pages = import.meta.glob("../pages/**/index.tsx");
@@ -31,7 +31,7 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
   const page = pages[key] as any;
   routeMap[path] = {
     path,
-    preload: page,
+    load: page,
     routerPath,
     Component: HOCSuspense(
       path,
@@ -70,7 +70,7 @@ function inject() {
 
 if (routeMap[basePath]) {
   const route = routeMap[basePath];
-  route.preload().then((page) => {
+  route.load().then((page) => {
     route.Component = page.default;
     inject();
   });

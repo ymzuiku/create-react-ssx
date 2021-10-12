@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { routeMap } from "../scripts/routeMap";
+import { preload } from "../scripts/preload";
 
 export default function Index() {
   const [num, setNum] = useState(0);
@@ -9,7 +9,7 @@ export default function Index() {
   };
 
   const handleLoadSubPage = () => {
-    routeMap["/sub"].preload();
+    preload("/sub");
   };
 
   return (

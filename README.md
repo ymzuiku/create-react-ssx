@@ -99,17 +99,15 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
 
 SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。
 
-组件 `scripts/routeMap` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`routeMap["/sub"].preload()` 即加载 /sub 页面的代码
+组件 `scripts/preload` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
 
 例子：
 
 ```tsx
-import { routeMap } from "../scripts/routeMap";
+import { preload } from "../scripts/preload";
 
 export default function Home(){
-    const handleLoadSubPage = () => {
-    routeMap["/sub"].preload();
-  };
+  const handleLoadSubPage = () => preload("/sub");
 
   return <div>
           <button
