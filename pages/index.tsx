@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { routeMap } from "../scripts/routeMap";
 
 export default function Index() {
   const [num, setNum] = useState(0);
-  function handleAddNum() {
+  const handleAddNum = () => {
     setNum(num + 1);
-  }
+  };
+
+  const handleLoadSubPage = () => {
+    routeMap["/sub"].preload();
+  };
 
   return (
     <div>
@@ -16,7 +21,9 @@ export default function Index() {
           add num
         </button>
       </div>
-      <Cell />
+      <button className="bg-gray-200 p-2 m-3" onMouseEnter={handleLoadSubPage} onTouchStart={handleLoadSubPage}>
+        hover loader sub page
+      </button>
     </div>
   );
 }
@@ -40,7 +47,7 @@ function Cell() {
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               <div className="relative">
                 <dt>
-                  <Link to={{ pathname: "/user", search: "?dog=20" }}>
+                  <Link to={{ pathname: "/sub", search: "?dog=20" }}>
                     <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                       <svg
                         className="h-6 w-6"

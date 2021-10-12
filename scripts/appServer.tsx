@@ -8,7 +8,7 @@ import { parsePages } from "./parsers";
 // const pages = import.meta.globEager("../pages/**/[[:word:]]+.tsx");
 const pages = import.meta.globEager("../pages/**/index.tsx");
 
-const routeMap: Record<
+const serverRouteMap: Record<
   string,
   {
     path: string;
@@ -19,13 +19,13 @@ const routeMap: Record<
 > = {};
 
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
-  routeMap[path] = {
+  serverRouteMap[path] = {
     path,
     routerPath,
     Component: pages[key].default,
     getServerSideProps: pages[key].getServerSideProps,
   };
-  return routeMap[path];
+  return serverRouteMap[path];
 });
 
 const serverSideProps: Record<string, unknown> = {};
@@ -36,7 +36,7 @@ export async function render(
   req?: { routerPath: string; query: Record<string, unknown> },
 ) {
   if (req) {
-    const route = routeMap[req.routerPath];
+    const route = serverRouteMap[req.routerPath];
     if (route && route.getServerSideProps) {
       serverSideProps[req.routerPath] = await Promise.resolve(route.getServerSideProps(req.query, req.routerPath));
     }

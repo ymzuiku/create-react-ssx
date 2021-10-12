@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages, parseSearch } from "./parsers";
+import { routeMap } from "./routeMap";
 
 const isProd = process.env.NODE_ENV === "production";
 const pages = import.meta.glob("../pages/**/index.tsx");
@@ -25,22 +26,12 @@ const HOCSuspense = (path: string, Component: React.FC): React.FC => {
   };
 };
 
-const routerMap = {} as Record<
-  string,
-  {
-    path: string;
-    loader: () => Promise<{ default: React.FC }>;
-    routerPath: string;
-    Component: React.FC;
-    getServerSideProps?: (query: Record<string, unknown>, routerPath: string) => Promise<Record<string, unknown>>;
-  }
->;
 const routes = parsePages(pages).map(({ path, key, routerPath }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const page = pages[key] as any;
-  routerMap[path] = {
+  routeMap[path] = {
     path,
-    loader: page,
+    preload: page,
     routerPath,
     Component: HOCSuspense(
       path,
@@ -64,7 +55,7 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
       }) as never) as React.FC,
     ),
   };
-  return routerMap[path];
+  return routeMap[path];
 });
 
 function inject() {
@@ -77,9 +68,9 @@ function inject() {
   );
 }
 
-if (routerMap[basePath]) {
-  const route = routerMap[basePath];
-  route.loader().then((page) => {
+if (routeMap[basePath]) {
+  const route = routeMap[basePath];
+  route.preload().then((page) => {
     route.Component = page.default;
     inject();
   });
