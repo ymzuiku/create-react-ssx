@@ -1,15 +1,12 @@
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { preload } from "../scripts/preload";
 
 export default function Index() {
+  preload("/sub");
   const [num, setNum] = useState(0);
   const handleAddNum = () => {
     setNum(num + 1);
-  };
-
-  const handleLoadSubPage = () => {
-    preload("/sub");
   };
 
   return (
@@ -21,14 +18,13 @@ export default function Index() {
           add num
         </button>
       </div>
-      <button className="bg-gray-200 p-2 m-3" onMouseEnter={handleLoadSubPage} onTouchStart={handleLoadSubPage}>
-        hover loader sub page
-      </button>
     </div>
   );
 }
 
 function Cell() {
+  const h = useHistory();
+
   return (
     <>
       <div className="py-20 bg-white">
@@ -47,24 +43,24 @@ function Cell() {
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               <div className="relative">
                 <dt>
-                  <Link to={{ pathname: "/sub", search: "?dog=20" }}>
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                      <svg
-                        className="h-6 w-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                        />
-                      </svg>
-                    </div>
-                  </Link>
+                  <div
+                    onClick={() => h.push("/sub?dog=20")}
+                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                    <svg
+                      className="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                      />
+                    </svg>
+                  </div>
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">支持 SSR/SSG</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">一个非常基础的SSR配置，新项目从这里开始非常合适</dd>
@@ -72,24 +68,24 @@ function Cell() {
 
               <div className="relative">
                 <dt>
-                  <Link to="/sub">
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                      <svg
-                        className="h-6 w-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-                        />
-                      </svg>
-                    </div>
-                  </Link>
+                  <div
+                    onClick={() => h.push("/sub")}
+                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                    <svg
+                      className="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                      />
+                    </svg>
+                  </div>
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">雷同 Next 的约定路由</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">

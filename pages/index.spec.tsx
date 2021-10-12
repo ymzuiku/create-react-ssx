@@ -4,6 +4,6 @@ import Index from "./index";
 
 test("renders learn react link", () => {
   const view = render(<Index />);
-  const linkElement = view.getByText(/Hello Sub Page/i);
+  const linkElement = view.getByText(/Base React/i);
   expect(linkElement).toBeInTheDocument();
 });

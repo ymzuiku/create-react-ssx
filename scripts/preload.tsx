@@ -12,7 +12,7 @@ export const routeMap = {} as Record<
 const preloadCache = {} as { [key: string]: boolean };
 
 export const preload = (url: string) => {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || (window as unknown as { isDev: boolean }).isDev) {
     return;
   }
   if (preloadCache[url]) {

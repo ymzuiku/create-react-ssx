@@ -4,4 +4,5 @@ import { config } from "dotenv";
 import React from "react";
 import "./proxyFetch";
 window.React = React;
+(window as any).isDev = true;
 config();
