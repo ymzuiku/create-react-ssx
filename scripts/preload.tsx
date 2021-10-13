@@ -20,7 +20,7 @@ export const preload = (url: string) => {
   }
   const page = routeMap[url.toLowerCase()];
   if (!page) {
-    throw new Error(`${url} isn't Router`);
+    throw new Error(`[create-react-ssx] ${url} isn't Router`);
   }
   preloadCache[url] = true;
   return page.load();

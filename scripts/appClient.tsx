@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { parsePages, parseSearch } from "./parsers";
 import { routeMap } from "./preload";
+import { getComponent } from "./getComponent";
 
 const isProd = process.env.NODE_ENV === "production";
 const pages = import.meta.glob("../pages/**/index.tsx");
@@ -36,7 +37,9 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
     Component: HOCSuspense(
       path,
       lazy((async () => {
-        const { default: Component, getServerSideProps } = await page();
+        const _page = await page();
+        const Component = getComponent(_page);
+        const getServerSideProps = _page.getServerSideProps;
         const ssrProps = serverSideProps[window.location.pathname];
         if (ssrProps) {
           return {
@@ -71,7 +74,7 @@ function inject() {
 if (routeMap[basePath]) {
   const route = routeMap[basePath];
   route.load().then((page) => {
-    route.Component = page.default;
+    route.Component = getComponent(page);
     inject();
   });
 } else {

@@ -80,6 +80,40 @@ npm install
       states.ts // 这是页面的状态管理
 ```
 
+#### 合法的页面组件导出
+
+规则：
+1. 优先使用 `export default`
+2. 其次使用首字母大写的 `export` 函数，确保只有一个此类函数
+
+
+A.有 `export default` 导出 default， 优先使用 `export default`:
+
+```tsx
+export default function Home(){
+  return <div>Home</div>
+}
+```
+
+B.其次使用首字母大写的 `export` 函数:
+
+```tsx
+export function Home(){
+  return <div>Home</div>
+}
+```
+
+```tsx
+// 正确，Props仅是类型对象，不会和页面组建冲突
+export interface Props {
+  title:string;
+};
+
+export function Home({title}:Props){
+  return <div>{title}</div>
+}
+```
+
 ## 预先加载路由
 
 SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。

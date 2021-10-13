@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { preload } from "../scripts/preload";
 
-export default function Index() {
+export function Index() {
   preload("/sub");
   const [num, setNum] = useState(0);
   const handleAddNum = () => {

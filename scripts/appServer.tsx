@@ -4,6 +4,7 @@ import { StaticRouter } from "react-router-dom";
 import type { StaticRouterContext } from "react-router";
 import { App } from "./App";
 import { parsePages } from "./parsers";
+import { getComponent } from "./getComponent";
 
 // const pages = import.meta.globEager("../pages/**/[[:word:]]+.tsx");
 const pages = import.meta.globEager("../pages/**/index.tsx");
@@ -22,7 +23,7 @@ const routes = parsePages(pages).map(({ path, key, routerPath }) => {
   serverRouteMap[path] = {
     path,
     routerPath,
-    Component: pages[key].default,
+    Component: getComponent(pages[key]),
     getServerSideProps: pages[key].getServerSideProps,
   };
   return serverRouteMap[path];
