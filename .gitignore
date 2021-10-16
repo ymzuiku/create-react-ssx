@@ -2,7 +2,7 @@
 .idea
 .vscode
 dist
-build
+./build
 coverage
 .env
 .eslintcache

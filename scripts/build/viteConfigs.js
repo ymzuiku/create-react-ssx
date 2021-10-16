@@ -6,7 +6,7 @@ const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
 const pkg = require(cwd + "/package.json");
-const serverIndex = pkg.serverDir + "/index.ts";
+const serverIndex = pkg.serverDir + "/server.ts";
 
 exports.serverDev = (define) =>
   Vite.defineConfig({
@@ -97,7 +97,7 @@ exports.entryServer = (define) =>
       lib: {
         name: "appServer",
         formats: ["cjs"],
-        entry: "scripts/appServer.tsx",
+        entry: "scripts/build/appServer.tsx",
       },
       emptyOutDir: false,
       outDir: "dist/server",

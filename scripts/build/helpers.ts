@@ -3,6 +3,10 @@ import path from "path";
 import fs from "fs-extra";
 import type { FastifyInstance } from "fastify";
 
+const cwd = process.cwd();
+export const Cwd = (...args: string[]) => path.resolve(cwd, ...args);
+export const Dir = (...args: string[]) => path.resolve(__dirname, ...args);
+
 export function loadPages(basePath: string) {
   let routesToPrerender: string[] = [];
   function fixPagesRouter(dir: string) {
@@ -66,7 +70,3 @@ export function loadFastifyStatic(app: FastifyInstance, globHtml?: boolean) {
     }
   }
 }
-
-const cwd = process.cwd();
-export const Cwd = (...args: string[]) => path.resolve(cwd, ...args);
-export const Dir = (...args: string[]) => path.resolve(__dirname, ...args);

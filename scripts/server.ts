@@ -1,6 +1,6 @@
 import { fastify } from "fastify";
-import { useSSR } from "./useSSR";
-import { getIPAddress } from "./getIPAddress";
+import { useSSR } from "./build/useSSR";
+import { getIPAddress } from "./build/getIPAddress";
 const PORT = process.env.PORT || 3000;
 
 const app = fastify({});

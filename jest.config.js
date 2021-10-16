@@ -1,6 +1,3 @@
-const path = require("path");
-const rootDir = path.resolve(__dirname, "../");
-
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
@@ -97,7 +94,6 @@ module.exports = {
 
   // The root directory that Jest should scan for tests and modules within
   // rootDir: undefined,
-  rootDir: rootDir,
 
   // A list of paths to directories that Jest should use to search for files in
   // roots: [
@@ -108,7 +104,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ["./scripts/jestSetup.ts"],
+  setupFiles: ["./scripts/build/jestSetup.ts"],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: [],

@@ -26,7 +26,7 @@ const define = {
   "process.env.BUILD": `"${process.env.BUILD}"`,
 };
 
-const devServerPath = Cwd("dist/server-dev/index.js");
+const devServerPath = Cwd("dist/server-dev/server.js");
 
 const requireTs = async (entry = "") => {
   await Vite.build(configs.tmp(entry));
@@ -80,7 +80,7 @@ async function build() {
   if (isProd) {
     if (isBuildStatic) {
       await Vite.build(configs.static(define));
-      const { ssg } = await requireTs("scripts/prerender.ts");
+      const { ssg } = await requireTs("scripts/build/prerender.ts");
       await ssg();
     }
 

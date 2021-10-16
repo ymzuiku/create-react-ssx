@@ -2,7 +2,7 @@
 import fs from "fs-extra";
 import path from "path";
 import { parseURL } from "./parsers";
-import { Cwd, loadPages } from "./loaders";
+import { Cwd, loadPages } from "./helpers";
 import { render } from "./appServer";
 
 const distPath = "dist/static";

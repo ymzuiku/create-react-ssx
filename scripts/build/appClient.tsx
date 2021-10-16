@@ -1,13 +1,13 @@
 import { hydrate, render } from "react-dom";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { App } from "./App";
+import { App } from "../App";
 import { parsePages, parseSearch } from "./parsers";
-import { routeMap } from "./preload";
+import { routeMap } from "../preload";
 import { getComponent } from "./getComponent";
 
 const isProd = process.env.NODE_ENV === "production";
-const pages = import.meta.glob("../pages/**/index.tsx");
+const pages = import.meta.glob("../../pages/**/index.tsx");
 
 const basePath = window.location.pathname;
 

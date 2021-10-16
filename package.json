@@ -4,13 +4,13 @@
   "private": true,
   "serverDir": "scripts",
   "scripts": {
-    "dev": "cross-env BUILD=ssr node scripts/build.js",
-    "build:ssr": "cross-env NODE_ENV=production BUILD=ssr node scripts/build.js",
-    "build:ssg": "cross-env NODE_ENV=production BUILD=ssg node scripts/build.js",
-    "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build.js",
-    "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build.js",
+    "dev": "cross-env BUILD=ssr node scripts/build",
+    "build:ssr": "cross-env NODE_ENV=production BUILD=ssr node scripts/build",
+    "build:ssg": "cross-env NODE_ENV=production BUILD=ssg node scripts/build",
+    "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build",
+    "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build",
     "serve": "node dist/server",
-    "test": "jest -c=scripts/jest.config.js --watch",
+    "test": "jest --watch",
     "prepare": "husky install"
   },
   "dependencies": {

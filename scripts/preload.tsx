@@ -9,19 +9,19 @@ export const routeMap = {} as Record<
   }
 >;
 
-const preloadCache = {} as { [key: string]: boolean };
+const routerPreloadCache = {} as { [key: string]: boolean };
 
 export const preload = (url: string) => {
   if (typeof window === "undefined" || (window as unknown as { isTest: boolean }).isTest) {
     return;
   }
-  if (preloadCache[url]) {
+  if (routerPreloadCache[url]) {
     return;
   }
   const page = routeMap[url.toLowerCase()];
   if (!page) {
     throw new Error(`[create-react-ssx] ${url} isn't Router`);
   }
-  preloadCache[url] = true;
+  routerPreloadCache[url] = true;
   return page.load();
 };

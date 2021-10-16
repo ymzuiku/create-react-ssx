@@ -25,7 +25,3 @@ export function Sub({ title }: Props) {
     </div>
   );
 }
-
-export function Cat() {
-  console.log("hello");
-}
