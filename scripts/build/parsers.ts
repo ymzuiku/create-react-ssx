@@ -23,7 +23,7 @@ export function parsePages(data: any) {
       return true;
     })
     .map((v) => {
-      const path = "/" + parseURL(v);
+      const path = ("/" + parseURL(v)).replace(/\\/g, "/");
       return {
         path,
         routerPath: path.split("?")[0],
