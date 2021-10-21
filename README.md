@@ -6,7 +6,7 @@
 
 ## Feature
 
-这应该是截止到 2021 年 9 月 1 日，以 React 作为前端的 NodeJS 全栈方案，较为完整的起步工程。改脚手架不捆绑任何第三方库（react及react-router除外）, 不会擅作主张的为你配置好状态管理等其他任何有妨碍你技术选型的库。
+这应该是截止到 2021 年 9 月 1 日，以 React 作为前端的 NodeJS 全栈方案，较为完整的起步工程。改脚手架不捆绑任何第三方库（react 及 react-router 除外）, 不会擅作主张的为你配置好状态管理等其他任何有妨碍你技术选型的库。
 
 - 开箱 typescript
 - 支持 SSG / SSR
@@ -18,7 +18,6 @@
 - 支持服务端开发（服务端基于 cluster.fork 的热更新）
 - 可以单独仅开发后端服务, 只需要删除工程根目录下 pages 和 index.html 即是一个单纯的后端项目
 - 可以在开发模式中使用 SSR，编译时分别编译，既享有全栈的开发体验，又享有前后端分离的编译和部署
-
 
 ## FQA
 
@@ -83,34 +82,34 @@ npm install
 #### 合法的页面组件导出
 
 规则：
+
 1. 优先使用 `export default`
 2. 其次使用首字母大写的 `export` 函数，确保只有一个此类函数
-
 
 A.有 `export default` 导出 default， 优先使用 `export default`:
 
 ```tsx
-export default function Home(){
-  return <div>Home</div>
+export default function Home() {
+  return <div>Home</div>;
 }
 ```
 
 B.其次使用首字母大写的 `export` 函数:
 
 ```tsx
-export function Home(){
-  return <div>Home</div>
+export function Home() {
+  return <div>Home</div>;
 }
 ```
 
 ```tsx
 // 正确，Props仅是类型对象，不会和页面组建冲突
 export interface Props {
-  title:string;
-};
+  title: string;
+}
 
-export function Home({title}:Props){
-  return <div>{title}</div>
+export function Home({ title }: Props) {
+  return <div>{title}</div>;
 }
 ```
 
@@ -125,12 +124,12 @@ SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增
 ```tsx
 import { preload } from "../scripts/preload";
 
-export default function Home(){
+export default function Home() {
   // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
   // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
-  preload("/sub")
+  preload("/sub");
 
-  return <div>hello</div>
+  return <div>hello</div>;
 }
 ```
 
@@ -139,18 +138,16 @@ export default function Home(){
 ```tsx
 import { preload } from "../scripts/preload";
 
-export default function Home(){
+export default function Home() {
   const handleLoadSubPage = () => preload("/sub");
 
-  return <div>
-          <button
-        className="bg-gray-200 p-2 m-3"
-        onMouseEnter={handleLoadSubPage}
-        onTouchStart={handleLoadSubPage}
-      >
+  return (
+    <div>
+      <button className="bg-gray-200 p-2 m-3" onMouseEnter={handleLoadSubPage} onTouchStart={handleLoadSubPage}>
         鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
       </button>
-  </div>
+    </div>
+  );
 }
 ```
 
@@ -159,25 +156,20 @@ export default function Home(){
 ```tsx
 import { preload } from "../scripts/preload";
 
-function usePreloads(){
+function usePreloads() {
   // 假定我们需要加载 /a, /b, /c，在这些页面加载完了我们再加载 /big
-  Promise.all([
-    preload("/a"),
-    preload("/b"),
-    preload("/c"),
-  ]).then(() => {
+  Promise.all([preload("/a"), preload("/b"), preload("/c")]).then(() => {
     preload("/big");
   });
 }
 
-export default function Home(){
+export default function Home() {
   // 预加载多个页面
   usePreloads();
 
-  return <div>hello</div>
+  return <div>hello</div>;
 }
 ```
-
 
 ## SSR 获取数据
 
@@ -194,12 +186,12 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
 };
 ```
 
-## 如何移除 tailwind 
+## 如何移除 tailwind
 
 tailwind-jit 基本是你无感知的，但是若你更喜欢其他 css 方案，只需修改 `scripts/App.tsx`：
 
 ```tsx
-// 注视第一行 tailwind.css 的引入, 如：
+// 注释第一行 tailwind.css 的引入, 如：
 // import "./tailwind.css";
 ```
 
@@ -237,4 +229,3 @@ npm run install
 
 1. 备份历史的 scripts 文件夹，并且下载新的 scripts 文件夹
 2. 更新 package.json 中和新 create-react-ssx 相关的依赖
-
