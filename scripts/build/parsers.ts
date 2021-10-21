@@ -10,7 +10,7 @@ export function parseURL(name: string) {
   if (list.length && list[list.length - 1] === "index") {
     list.pop();
   }
-  const url = list.join("/").toLocaleLowerCase();
+  const url = list.join("/");
   return url.split("?")[0];
 }
 

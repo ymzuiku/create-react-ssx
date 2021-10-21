@@ -1,3 +1,4 @@
+import { useHistory } from "react-router-dom";
 import { Other } from "./other";
 
 export interface Props {
@@ -17,11 +18,16 @@ export const world = () => {
 };
 
 export function Sub({ title }: Props) {
+  const h = useHistory();
+  const handlePushDetail = () => {
+    h.push("/sub/detailPage");
+  };
   return (
     <div>
       <div>Hello Sub Page</div>
       <div>{title}</div>
       <Other />
+      <button onClick={handlePushDetail}>go to detail page</button>
     </div>
   );
 }
