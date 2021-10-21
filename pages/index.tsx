@@ -89,7 +89,7 @@ function Cell() {
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">雷同 Next 的约定路由</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
-                  pages 下所有 *.tsx 文件均为页面组件, 文件名为 `_` 开头的除外
+                  pages 下所有 index.tsx 文件均为页面组件, 可以保留鸭子模型的目录结构
                 </dd>
               </div>
 
