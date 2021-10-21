@@ -44,7 +44,7 @@ export function loadStaticRoutes() {
   }
   const fg = require("fast-glob");
   routersCache = fg
-    .sync([Dir("static") + "/**/*.html"])
+    .sync([Dir("static").replace(/\\/g, "/") + "/**/*.html"])
     .map((v = "") => v.replace(staticPath, "").replace("/index.html", "").replace(".html", ""))
     .filter(Boolean);
   return routersCache;
@@ -60,10 +60,9 @@ export function loadFastifyStatic(app: FastifyInstance, globHtml?: boolean) {
     });
     if (globHtml) {
       loadStaticRoutes().forEach((route) => {
-        const indexPath = Dir("static", route.replace("/", "") + "/index.html");
-        const namePath = Dir("static", route.replace("/", "") + ".html");
-        const buff = fs.existsSync(indexPath) ? fs.readFileSync(indexPath) : fs.readFileSync(namePath);
-        app.get(route, (req, reply) => {
+        const indexPath = Dir("static", route.replace(path.sep, "") + path.sep + "index.html");
+        const buff = fs.readFileSync(indexPath);
+        app.get(route.replace(/\\/g, "/"), (req, reply) => {
           reply.type("text/html").send(buff);
         });
       });
