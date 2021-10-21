@@ -4,8 +4,8 @@ import fs from "fs-extra";
 import type { FastifyInstance } from "fastify";
 
 const cwd = process.cwd();
-export const Cwd = (...args: string[]) => path.resolve(cwd, ...args);
-export const Dir = (...args: string[]) => path.resolve(__dirname, ...args);
+export const Cwd = (...args: string[]) => path.posix.resolve(cwd, ...args);
+export const Dir = (...args: string[]) => path.posix.resolve(__dirname, ...args);
 
 export function loadPages(basePath: string) {
   let routesToPrerender: string[] = [];
@@ -13,7 +13,7 @@ export function loadPages(basePath: string) {
     fs.readdirSync(dir)
       .filter((v) => !/\.(css|json|md|go)/.test(v))
       .forEach((file) => {
-        const subDir = path.resolve(dir, file);
+        const subDir = path.posix.posix.resolve(dir, file);
         if (fs.statSync(subDir).isDirectory()) {
           fixPagesRouter(subDir);
           return;
@@ -23,7 +23,7 @@ export function loadPages(basePath: string) {
         }
         let name = file.replace(/\.tsx$/, "").toLowerCase();
         name = "/" + name;
-        routesToPrerender.push(path.join(dir, name));
+        routesToPrerender.push(path.posix.join(dir, name));
       });
   }
   fixPagesRouter(basePath);

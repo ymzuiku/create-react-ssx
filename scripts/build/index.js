@@ -6,7 +6,7 @@ const fs = require("fs-extra");
 const configs = require("./viteConfigs");
 
 const child_process = require("child_process");
-const Cwd = (...args) => path.resolve(process.cwd(), ...args);
+const Cwd = (...args) => path.posix.resolve(process.cwd(), ...args);
 const isProd = process.env.NODE_ENV === "production";
 
 function checkIsSSR() {
@@ -30,7 +30,7 @@ const devServerPath = Cwd("dist/server-dev/server.js");
 
 const requireTs = async (entry = "") => {
   await Vite.build(configs.tmp(entry));
-  return require(Cwd("dist/tmp", path.parse(Cwd(entry)).name));
+  return require(Cwd("dist/tmp", path.posix.parse(Cwd(entry)).name));
 };
 
 function copyFiles(files = [""]) {
