@@ -16,7 +16,7 @@ export function getComponent(object: { [key: string]: any }): any {
     }
   }
   if (!out) {
-    throw new Error("[create-react-ssx] Find page component error");
+    throw new Error("[create-react-ssx] Find page component error, first label need upperCase: " + keys.join(","));
   }
 
   return out;
