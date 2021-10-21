@@ -139,7 +139,7 @@ function Cell() {
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">其他细节 Tailwind-jit</p>
                 </dt>
                 <dd className="mt-2 ml-16 text-base text-gray-500">
-                  默认已为你配置好 Tailwind-jit, ESLint, Prettier, 图片压缩99
+                  默认已为你配置好 Tailwind-jit, ESLint, Prettier, 图片压缩
                 </dd>
               </div>
             </dl>
