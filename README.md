@@ -220,7 +220,7 @@ create-react-ssx 所有的逻辑都编写在 scripts 中，你可以从新的 cr
 
 ```bash
 # 在一个 create-react-ssx 工程中使用：
-create-react-ssx --update
+npx create-react-ssx --update
 # 安装新依赖（若 package.json 有依赖变动）
 npm run install
 ```
