@@ -27,7 +27,7 @@
   1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
   1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
   1. 使用 React-Route 作为路由
-  1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、tailwind-jit、eslint、prettier、pre-commit、jest(es-build)
+  1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、tailwind-jit、eslint、prettier、pre-commit、jest(esbuild)
   1. getServerSideProps 兼容 SSR 和 SSG
 - Q: 为什么 npm run dev 样式会延迟加载？
   - 开发环境下 tailwind-jit 还未动态编译完
@@ -83,8 +83,8 @@ npm install
 
 规则：
 
-1. 优先使用 `export default`
-2. 其次使用首字母大写的 `export` 函数，确保只有一个此类函数
+1. 优先读取 `export default`
+2. 其次读取首字母大写的 `export` 函数，确保只有一个此类函数
 
 A.有 `export default` 导出 default， 优先使用 `export default`:
 
@@ -103,7 +103,7 @@ export function Home() {
 ```
 
 ```tsx
-// 正确，Props仅是类型对象，不会和页面组建冲突
+// 正确，Props仅是类型对象，不会和页面组件冲突
 export interface Props {
   title: string;
 }
@@ -117,7 +117,7 @@ export function Home({ title }: Props) {
 
 SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。
 
-组件 `scripts/preload` 中记录了所有拆分页面对象，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
+组件 `scripts/preload` 提供了页面预加载的方法，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
 
 直接预加载例子：
 
@@ -199,7 +199,7 @@ tailwind-jit 基本是你无感知的，但是若你更喜欢其他 css 方案�
 
 后端的默认入口文件夹为 scripts，若您需要进行完整的后端开发，我们建议您做以下调整：
 
-1. 创建 server 文件夹，并把 `scripts/index.ts` 文件移动到 `server/index.ts` 中
+1. 创建 server 文件夹，并把 `scripts/server.ts` 文件移动到 `server/server.ts` 中
 2. 修改 package.json 中的 serverDir，从 `scripts` 修改为 `server`
 
 ## Deploy

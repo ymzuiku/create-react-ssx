@@ -61,12 +61,12 @@ worker.addListener("close", (code) => {
         ...oldPkg.devDependencies,
         ...newPkg.devDependencies,
       };
-      if (JSON.stringify(oldPkg.scripts) !== JSON.stringify(newPkg.scripts)) {
-        oldPkg = {
-          scriptsByUpdate: newPkg.scripts,
-          ...oldPkg,
-        };
-      }
+      // if (JSON.stringify(oldPkg.scripts) !== JSON.stringify(newPkg.scripts)) {
+      //   oldPkg = {
+      //     scriptsByUpdate: newPkg.scripts,
+      //     ...oldPkg,
+      //   };
+      // }
       if (!oldPkg.serverDir) {
         oldPkg = {
           serverDir: newPkg.serverDir,
