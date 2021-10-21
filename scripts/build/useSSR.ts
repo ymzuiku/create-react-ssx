@@ -54,7 +54,6 @@ export const useSSR = async (app: FastifyInstance) => {
   }
 
   routers.map(parseURL).forEach((url) => {
-    url = url.replace(/\\/g, "/");
     app.get(url, async (req, reply) => {
       try {
         const url = req.url;

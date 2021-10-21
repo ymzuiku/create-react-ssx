@@ -22,7 +22,7 @@ export function loadPages(basePath: string) {
           return;
         }
         let name = file.replace(/\.tsx$/, "").toLowerCase();
-        name = "/" + name;
+        name = path.sep + name;
         routesToPrerender.push(path.join(dir, name));
       });
   }

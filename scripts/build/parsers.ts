@@ -1,4 +1,5 @@
 export function parseURL(name: string) {
+  name = name.replace(/\\/g, "/");
   if (name === "/index" || name === "/") {
     return "/";
   }
@@ -23,10 +24,10 @@ export function parsePages(data: any) {
       return true;
     })
     .map((v) => {
-      const path = ("/" + parseURL(v)).replace(/\\/g, "/");
+      const url = "/" + parseURL(v);
       return {
-        path,
-        routerPath: path.split("?")[0],
+        path: url,
+        routerPath: url.split("?")[0],
         key: v,
       };
     });
