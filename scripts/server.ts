@@ -1,10 +1,8 @@
-import sourceMapSupport from "source-map-support";
 import { fastify } from "fastify";
 import { useSSR } from "./build/useSSR";
 import { getIPAddress } from "./build/getIPAddress";
 import { config } from "dotenv";
 
-sourceMapSupport.install();
 config();
 const PORT = process.env.PORT || 3000;
 
