@@ -36,7 +36,10 @@ export async function ssg() {
   const routesToPrerender = loadPages(Cwd("pages"));
   routesToPrerender.forEach((v) => {
     const real = Cwd(distPath, v.replace("/", ""));
-    fs.mkdirpSync(path.parse(real).dir);
+    const thePath = path.parse(real).dir;
+    if (!fs.existsSync(thePath)) {
+      fs.mkdirpSync(thePath);
+    }
   });
 
   fs.writeFileSync(Cwd(`${distPath}/__tmp__.html`), template);
