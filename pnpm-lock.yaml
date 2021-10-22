@@ -38,7 +38,6 @@ specifiers:
   react: ^17.0.2
   react-dom: ^17.0.2
   react-router-dom: ^5.2.0
-  source-map-support: ^0.5.20
   tailwindcss: ^2.2.7
   tslib: ^2.3.1
   typescript: ^4.3.5
@@ -86,7 +85,6 @@ devDependencies:
   lint-staged: 11.1.2
   postcss: 8.3.6
   prettier: 2.3.2
-  source-map-support: 0.5.20
   tailwindcss: 2.2.7_3ae63246f7b6ebdbe8521b4b745e51c3
   tslib: 2.3.1
   typescript: 4.3.5
@@ -6841,13 +6839,6 @@ packages:
 
   /source-map-support/0.5.19:
     resolution: {integrity: sha512-Wonm7zOCIJzBGQdB+thsPar0kYuCIzYvxZwlBa87yi/Mdjv7Tip2cyVbLj5o0cFPN4EVkuTwb3GDDyUx2DGnGw==}
-    dependencies:
-      buffer-from: 1.1.2
-      source-map: 0.6.1
-    dev: true
-
-  /source-map-support/0.5.20:
-    resolution: {integrity: sha512-n1lZZ8Ve4ksRqizaBQgxXDgKwttHDhyfQjA6YZZn8+AroHbsIz+JjwxQDxbp+7y5OYCI8t1Yk7etjD9CRd2hIw==}
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
