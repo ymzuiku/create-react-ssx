@@ -45,7 +45,7 @@ export function loadStaticRoutes() {
   const fg = require("fast-glob");
   routersCache = fg
     .sync([Dir("static").replace(/\\/g, "/") + "/**/*.html"])
-    .map((v = "") => v.replace(staticPath, "").replace("/index.html", "").replace(".html", ""))
+    .map((v = "") => v.replace(staticPath.replace(/\\/g, "/"), "").replace("/index.html", "").replace(".html", ""))
     .filter(Boolean);
   return routersCache;
 }

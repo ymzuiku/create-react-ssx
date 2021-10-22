@@ -11,6 +11,7 @@ export function parseURL(name: string) {
     list.pop();
   }
   const url = list.join("/");
+
   return url.split("?")[0];
 }
 
