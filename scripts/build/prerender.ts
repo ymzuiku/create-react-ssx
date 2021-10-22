@@ -42,7 +42,7 @@ export async function ssg() {
     }
   });
 
-  fs.writeFileSync(Cwd(`${distPath}/__tmp__.html`), template);
+  fs.writeFileSync(Cwd(`${distPath}${path.sep}__tmp__.html`), template);
 
   for (const url of routesToPrerender) {
     const context = {};
