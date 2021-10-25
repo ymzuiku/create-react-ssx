@@ -6,6 +6,7 @@ const { spawn } = require("child_process");
 const argv = process.argv.splice(2);
 const Cwd = (...args) => path.resolve(process.cwd(), ...args);
 let dir = argv[0];
+const isFocus = argv[1] === "--focus";
 
 function copyFolderSync(from, to) {
   fs.mkdirSync(to);
@@ -47,9 +48,7 @@ worker.addListener("close", (code) => {
     fs.rmSync(Cwd(dir, "packages"), { recursive: true, force: true });
     // fs.rmSync(Cwd(dir, "pnpm-lock.yaml"), { recursive: true, force: true });
     fs.rmSync(Cwd(dir, "ssx-logo.svg"), { recursive: true, force: true });
-    console.log(" ");
-    console.log("Create Project Done! Please go on:");
-    console.log(`cd ${dir} && npm install (We like: pnpm install)`);
+
     if (dir === "updateby-create-react-ssx") {
       let oldPkg = require(Cwd("package.json"));
       const newPkg = require(Cwd(dir, "package.json"));
@@ -75,10 +74,21 @@ worker.addListener("close", (code) => {
       }
       fs.writeFileSync(Cwd("package.json"), JSON.stringify(oldPkg, null, 2));
       if (fs.existsSync("scripts")) {
-        fs.renameSync("scripts", "scripts_" + Date.now());
+        if (isFocus) {
+          fs.rmSync("scripts", { force: true, recursive: true });
+        } else {
+          fs.renameSync("scripts", "scripts_" + Date.now());
+        }
       }
       copyFolderSync(Cwd(dir, "scripts"), Cwd("scripts"));
       fs.rmSync(Cwd(dir), { recursive: true, force: true });
+      console.log(" ");
+      console.log(`${isFocus ? "Focus " : ""}Update Project Done! Please go on:`);
+      console.log(`npm install (We like: pnpm install)`);
+    } else {
+      console.log(" ");
+      console.log("Create Project Done! Please go on:");
+      console.log(`cd ${dir} && npm install (We like: pnpm install)`);
     }
   }
 });
