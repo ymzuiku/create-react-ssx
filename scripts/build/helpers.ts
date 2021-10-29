@@ -15,6 +15,9 @@ export function loadPages(basePath: string) {
       .forEach((file) => {
         const subDir = path.resolve(dir, file);
         if (fs.statSync(subDir).isDirectory()) {
+          if (/\/_/.test(subDir)) {
+            return;
+          }
           fixPagesRouter(subDir);
           return;
         }
@@ -23,7 +26,11 @@ export function loadPages(basePath: string) {
         }
         let name = file.replace(/\.tsx$/, "").toLowerCase();
         name = path.sep + name;
-        routesToPrerender.push(path.join(dir, name));
+        const routePath = path.join(dir, name);
+        if (/\/_/.test(routePath)) {
+          return;
+        }
+        routesToPrerender.push(routePath);
       });
   }
   fixPagesRouter(basePath);

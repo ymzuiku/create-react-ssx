@@ -22,6 +22,9 @@ export function parsePages(data: any) {
       if (!/index\.tsx$/.test(v)) {
         return false;
       }
+      if (/\/_/.test(v)) {
+        return false;
+      }
       return true;
     })
     .map((v) => {

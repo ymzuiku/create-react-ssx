@@ -68,15 +68,21 @@ npm install
 
 #### 为什么不和 Next.js 一样匹配所有名称的路径，仅忽略 `_` 开头的文件？
 
-因为仅使用 index.tsx 作为路由文件的好处是可以使用更直观的鸭子目录结构, 如:
+1. 因为仅使用 index.tsx 作为路由文件的好处是可以使用更直观的鸭子目录结构
+2. 路由解析会忽略路径中带有 `_` 开头的文件夹
+
+例子:
 
 ```txt
 - pages/
+   - index.tsx // 这是根路径
    - sub/
       index.tsx // 这是页面
       Header.tsx // 这是页面的某子组建
       useData.ts // 这是页面的hooks
       states.ts // 这是页面的状态管理
+   - _components/ // 这个文件夹由 _ 开头，会被忽略
+      index.tsx
 ```
 
 #### 合法的页面组件导出
