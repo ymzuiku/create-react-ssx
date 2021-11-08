@@ -1,9 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  --color-primary: hsl(232, 47%, 56%);
+  --color-primary-dark: hsl(232, 40%, 49%);
+  --color-primary-light: hsl(232, 51%, 62%);
+  --color-secondary: hsl(150, 62%, 41%);
+  --color-secondary-dark: hsl(150, 65%, 32%);
+  --color-secondary-light: hsl(150, 58%, 50%);
+  --color-error: hsl(0, 60%, 49%);
+  --color-error-dark: hsl(0, 66%, 40%);
+  --color-error-light: hsl(0, 68%, 56%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: hsl(232, 47%, 56%);
+    --color-primary-dark: hsl(232, 40%, 49%);
+    --color-primary-light: hsl(232, 51%, 62%);
+    --color-secondary: hsl(150, 62%, 41%);
+    --color-secondary-dark: hsl(150, 65%, 32%);
+    --color-secondary-light: hsl(150, 58%, 50%);
+    --color-error: hsl(0, 60%, 49%);
+    --color-error-dark: hsl(0, 66%, 40%);
+    --color-error-light: hsl(0, 68%, 56%);
+  }
+}
 
 * {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   outline: none;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
