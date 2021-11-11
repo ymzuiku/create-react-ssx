@@ -1,4 +1,5 @@
 import "./tailwind.css";
+import { Root } from "../pages/root";
 import { Route, Switch } from "react-router-dom";
 
 export interface AppProps {
@@ -13,15 +14,18 @@ export interface AppProps {
 
 export function App({ routes, serverSideProps }: AppProps) {
   return (
-    <Switch>
-      {routes.map(({ path, Component, routerPath }) => {
-        const ssrProps = (serverSideProps[routerPath] || {}) as Record<string, unknown>;
-        return (
-          <Route exact key={path} path={[path, path + ".html"]}>
-            <Component {...ssrProps} />
-          </Route>
-        );
-      })}
-    </Switch>
+    <>
+      <Root />
+      <Switch>
+        {routes.map(({ path, Component, routerPath }) => {
+          const ssrProps = (serverSideProps[routerPath] || {}) as Record<string, unknown>;
+          return (
+            <Route exact key={path} path={[path, path + ".html"]}>
+              <Component {...ssrProps} />
+            </Route>
+          );
+        })}
+      </Switch>
+    </>
   );
 }

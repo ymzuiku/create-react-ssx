@@ -177,6 +177,13 @@ export default function Home() {
 }
 ```
 
+## Root 组件
+
+为了保证 scripts 中不含有业务代码，便于更新，我们增加了一个 `pages/root.tsx` 的约定，默认情况下它是一个空组件，会加载在路由之外，它一般用在以下两个用途
+
+1. 若业务需要在路由之外扩展组件，可以在此组件下继续开发
+2. 全局需要引用的对象，如 polyfill，可以在 root.tsx 中引入
+
 ## SSR 获取数据
 
 1. 雷同 NextJS 的 `getServerSideProps` API, 在页面组建中，`export getServerSideProps` 方法，SSR 在渲染组件之前会先抓取数据，注入到页面的 Props 中
