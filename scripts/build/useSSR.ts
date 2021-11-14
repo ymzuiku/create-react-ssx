@@ -4,7 +4,6 @@ import fs from "fs-extra";
 import { parseURL } from "./parsers";
 import { Cwd, Dir, loadFastifyStatic, loadPages, loadStaticRoutes } from "./helpers";
 import "./proxyFetch";
-const isWin32 = process.platform === "win32";
 
 export const useSSR = async (app: FastifyInstance) => {
   const isProd = process.env.NODE_ENV === "production";
@@ -40,10 +39,7 @@ export const useSSR = async (app: FastifyInstance) => {
       plugins: [reactRefresh(), reactJsx()],
       server: {
         middlewareMode: "ssr",
-        watch: {
-          chokidar: { usePolling: isWin32 },
-          buildDelay: 30,
-        },
+        watch: {},
       },
     });
 
