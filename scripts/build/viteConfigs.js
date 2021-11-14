@@ -7,6 +7,7 @@ const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
 const pkg = require(cwd + "/package.json");
 const serverIndex = pkg.serverDir + "/server.ts";
+const isWin32 = process.platform === "win32";
 
 exports.serverDev = (define) =>
   Vite.defineConfig({
@@ -28,9 +29,14 @@ exports.serverDev = (define) =>
       },
       outDir: "dist/server-dev",
       emptyOutDir: true,
-      watch: {
-        buildDelay: 30,
-      },
+      ...(isWin32
+        ? {
+            watch: {
+              chokidar: { usePolling: true },
+              buildDelay: 30,
+            },
+          }
+        : {}),
     },
   });
 
