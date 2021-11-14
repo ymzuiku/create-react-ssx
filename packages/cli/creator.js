@@ -6,7 +6,7 @@ const { spawn } = require("child_process");
 const argv = process.argv.splice(2);
 const Cwd = (...args) => path.resolve(process.cwd(), ...args);
 let dir = argv[0];
-const isFocus = argv[1] === "--focus";
+const isFocus = argv.find((v) => v === "--focus" || v === "-f");
 
 function copyFolderSync(from, to) {
   fs.mkdirSync(to);
