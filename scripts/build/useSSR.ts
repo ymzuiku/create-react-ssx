@@ -40,14 +40,10 @@ export const useSSR = async (app: FastifyInstance) => {
       plugins: [reactRefresh(), reactJsx()],
       server: {
         middlewareMode: "ssr",
-        ...(isWin32
-          ? {
-              watch: {
-                usePolling: true,
-                interval: 100,
-              },
-            }
-          : {}),
+        watch: {
+          chokidar: { usePolling: isWin32 },
+          buildDelay: 30,
+        },
       },
     });
 

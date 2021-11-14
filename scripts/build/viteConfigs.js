@@ -29,14 +29,10 @@ exports.serverDev = (define) =>
       },
       outDir: "dist/server-dev",
       emptyOutDir: true,
-      ...(isWin32
-        ? {
-            watch: {
-              chokidar: { usePolling: true },
-              buildDelay: 30,
-            },
-          }
-        : {}),
+      watch: {
+        chokidar: { usePolling: isWin32 },
+        buildDelay: 30,
+      },
     },
   });
 
