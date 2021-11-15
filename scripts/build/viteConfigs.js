@@ -110,6 +110,7 @@ exports.static = () =>
       reactRefresh(),
       reactJsx(),
       viteImagemin({
+        filter: /(\.png|\.jpg|\.jpge|\.gif)/,
         gifsicle: {
           optimizationLevel: 7,
           interlaced: false,
@@ -124,17 +125,7 @@ exports.static = () =>
           quality: [0.8, 0.9],
           speed: 4,
         },
-        svgo: {
-          plugins: [
-            {
-              name: "removeViewBox",
-            },
-            {
-              name: "removeEmptyAttrs",
-              active: false,
-            },
-          ],
-        },
+        svgo: false,
       }),
     ],
     mode,
