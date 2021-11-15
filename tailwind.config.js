@@ -1,4 +1,21 @@
 const colors = require("tailwindcss/colors");
+const theme = require("tailwindcss/defaultTheme");
+
+const px12 = {
+  "0/12": "0%",
+  "1/12": (1 / 12) * 100 + "%",
+  "2/12": (2 / 12) * 100 + "%",
+  "3/12": "25%",
+  "4/12": "30%",
+  "5/12": (5 / 12) * 100 + "%",
+  "6/12": "50%",
+  "7/12": (7 / 12) * 100 + "%",
+  "8/12": "60%",
+  "9/12": "75%",
+  "10/12": (10 / 12) * 100 + "%",
+  "11/12": (11 / 12) * 100 + "%",
+  "12/12": "100%",
+};
 
 module.exports = {
   mode: "jit",
@@ -12,9 +29,6 @@ module.exports = {
       secondary: "var(--color-secondary)",
       "secondary-light": "var(--color-secondary-light)",
       "secondary-dark": "var(--color-secondary-dark)",
-      error: "var(--color-error)",
-      "error-light": "var(--color-error-light)",
-      "error-dark": "var(--color-error-dark)",
       transparent: "transparent",
       current: "currentColor",
       ...colors,
@@ -46,6 +60,8 @@ module.exports = {
       "2xl": "1536px",
       all: "1px",
     },
+    maxWidth: { ...px12, ...theme.maxWidth },
+    maxHeight: { ...px12, ...theme.maxHeight },
     extend: {},
   },
   variants: {
