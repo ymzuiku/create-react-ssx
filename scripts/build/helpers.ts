@@ -67,6 +67,9 @@ export function loadFastifyStatic(app: FastifyInstance, globHtml?: boolean) {
     });
     if (globHtml) {
       loadStaticRoutes().forEach((route) => {
+        if (/__tmp__/.test(route)) {
+          return;
+        }
         const indexPath = Dir("static", route.replace(path.sep, "") + path.sep + "index.html");
         const buff = fs.readFileSync(indexPath);
         app.get(route.replace(/\\/g, "/"), (req, reply) => {

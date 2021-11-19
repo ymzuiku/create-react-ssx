@@ -51,7 +51,7 @@ export const useSSR = async (app: FastifyInstance) => {
   }
 
   routers.map(parseURL).forEach((url) => {
-    if (url === "/__tmp__") {
+    if (/__tmp__/.test(url)) {
       return;
     }
     app.get(url, async (req, reply) => {
