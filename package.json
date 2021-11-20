@@ -76,5 +76,15 @@
     "scripts/**/*": "prettier --write --ignore-unknown",
     "pages/**/*.{tsx,ts}": "eslint --cache --fix",
     "scripts/**/*.{tsx,ts}": "eslint --cache --fix"
+  },
+  "bin": {
+    "right-os": "./dist/server/index.js"
+  },
+  "pkg": {
+    "assets": [
+      "dist/server/static/**/*",
+      "dist/server/.env"
+    ],
+    "outputPath": "./dist/server"
   }
 }
