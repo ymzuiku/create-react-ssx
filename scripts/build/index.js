@@ -28,6 +28,30 @@ const define = {
 
 const devServerPath = Cwd("dist/server-dev/server.js");
 
+function copyPackage() {
+  const pkg = require(Cwd("package.json"));
+  delete pkg.devDependencies;
+  delete pkg.dependencies;
+  delete pkg.scripts;
+  delete pkg["lint-staged"];
+  delete pkg["prettier"];
+
+  fs.writeJSONSync(
+    Cwd("dist/server/package.json"),
+    {
+      ...pkg,
+      bin: {
+        [pkg.name]: "./index.js",
+      },
+      pkg: {
+        assets: ["static/**/*", ".env"],
+        outputPath: "./",
+      },
+    },
+    { spaces: 2 },
+  );
+}
+
 const requireTs = async (entry = "") => {
   await Vite.build(configs.tmp(entry));
   return require(Cwd("dist/tmp", path.parse(Cwd(entry)).name));
@@ -41,15 +65,6 @@ function copyFiles(files = [""]) {
     }
   });
 }
-
-// function copyPackage() {
-//   const pkg = require(Cwd("package.json"));
-//   delete pkg.devDependencies;
-//   delete pkg.scripts;
-//   delete pkg["lint-staged"];
-//   delete pkg["prettier"];
-//   fs.writeJSONSync(Cwd("dist/server/package.json"), pkg, { spaces: 2 });
-// }
 
 let worker;
 async function onBoundleEnd() {
@@ -99,8 +114,9 @@ async function build() {
       if (isSSR) {
         await Vite.build(configs.entryServer(define));
       }
-      // copyPackage();
-      copyFiles([".env", "pnpm-lock.yaml", "yarn.lock", "package-lock.json"]);
+
+      copyFiles([".env"]);
+      copyPackage();
       require("@vercel/ncc")(Cwd("./dist/server/server.js"), {
         cache: false,
         filterAssetBase: process.cwd(), // default

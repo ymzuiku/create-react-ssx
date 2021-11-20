@@ -5,7 +5,7 @@ import type { FastifyInstance } from "fastify";
 
 const cwd = process.cwd();
 export const Cwd = (...args: string[]) => path.resolve(cwd, ...args);
-export const Dir = (...args: string[]) => path.resolve(__dirname, ...args);
+export const Dir = (...args: string[]) => path.resolve("./", ...args);
 
 export function loadPages(basePath: string) {
   let routesToPrerender: string[] = [];
@@ -44,6 +44,7 @@ export function loadStaticRoutes() {
   if (routersCache !== void 0) {
     return routersCache;
   }
+
   const staticPath = Dir("static");
   if (!fs.existsSync(staticPath)) {
     routersCache = [];
@@ -51,9 +52,18 @@ export function loadStaticRoutes() {
   }
   const fg = require("fast-glob");
   routersCache = fg
-    .sync([Dir("static").replace(/\\/g, "/") + "/**/*.html"])
+    .sync([staticPath.replace(/\\/g, "/") + "/**/*.html"])
     .map((v = "") => v.replace(staticPath.replace(/\\/g, "/"), "").replace("/index.html", "").replace(".html", ""))
-    .filter(Boolean);
+    .filter((v: string) => {
+      if (!v) {
+        return false;
+      }
+      if (/__tmp__/.test(v)) {
+        return false;
+      }
+      return true;
+    });
+
   return routersCache;
 }
 
@@ -67,9 +77,6 @@ export function loadFastifyStatic(app: FastifyInstance, globHtml?: boolean) {
     });
     if (globHtml) {
       loadStaticRoutes().forEach((route) => {
-        if (/__tmp__/.test(route)) {
-          return;
-        }
         const indexPath = Dir("static", route.replace(path.sep, "") + path.sep + "index.html");
         const buff = fs.readFileSync(indexPath);
         app.get(route.replace(/\\/g, "/"), (req, reply) => {
