@@ -184,6 +184,23 @@ export default function Home() {
 1. 若业务需要在路由之外扩展组件，可以在此组件下继续开发
 2. 全局需要引用的对象，如 polyfill，可以在 root.tsx 中引入
 
+## route 钩子
+
+若需要在 route 切换时，进行一些事件和重定向，请在 root.tsx 中使用 routerHooks.before:
+
+```tsx
+import { routerHooks } from "../scripts/routerHelper";
+
+// 若返回字符串不为空，则重定向到指定字符串
+routerHooks.before = (path) => {
+  if (path === "/os" && localStorage.getItem("token")) {
+    return "/os/pay";
+  }
+  return "";
+};
+```
+
+
 ## SSR 获取数据
 
 1. 雷同 NextJS 的 `getServerSideProps` API, 在页面组建中，`export getServerSideProps` 方法，SSR 在渲染组件之前会先抓取数据，注入到页面的 Props 中
@@ -198,6 +215,8 @@ export const getServerSideProps = async (req: GetServerSideRequire) => {
   return { str: "user", dog: req.query.dog, query2: req.query };
 };
 ```
+
+
 
 ## 如何移除 tailwind
 
