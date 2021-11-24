@@ -15,7 +15,6 @@ export interface AppProps {
 
 function BeforeComponent({ Component, path, ...rest }: { Component: React.FC; path: string }): JSX.Element {
   if (typeof window !== "undefined") {
-    console.log("ininin");
     const str = routerHooks.before(path);
     if (str) {
       return <Redirect to={str} />;
