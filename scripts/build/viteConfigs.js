@@ -6,7 +6,7 @@ const isProd = process.env.NODE_ENV === "production";
 const mode = isProd ? "production" : "development";
 const cwd = process.cwd();
 const pkg = require(cwd + "/package.json");
-const serverIndex = pkg.serverDir + "/server.ts";
+const serverIndex = process.env.SERVER_DIR + "/index.ts";
 
 exports.serverDev = (define) =>
   Vite.defineConfig({
@@ -22,7 +22,7 @@ exports.serverDev = (define) =>
       minify: false,
       target: "es6",
       lib: {
-        name: "server-dev",
+        name: "cmd-dev",
         formats: ["cjs"],
         entry: serverIndex,
       },
@@ -50,7 +50,7 @@ exports.server = (define) =>
         formats: ["cjs"],
         entry: serverIndex,
       },
-      outDir: "dist/server",
+      outDir: "dist/cmd",
       emptyOutDir: true,
     },
   });
@@ -98,7 +98,7 @@ exports.entryServer = (define) =>
         entry: "scripts/build/appServer.tsx",
       },
       emptyOutDir: false,
-      outDir: "dist/server",
+      outDir: "dist/cmd",
       emptyOutDir: false,
     },
   });

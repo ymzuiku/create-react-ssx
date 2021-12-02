@@ -2,13 +2,12 @@
   "name": "create-react-ssx",
   "version": "0.0.0",
   "private": true,
-  "serverDir": "scripts",
   "scripts": {
-    "dev": "cross-env BUILD=ssr node scripts/build",
-    "build:ssr": "cross-env NODE_ENV=production BUILD=ssr node scripts/build",
-    "build:ssg": "cross-env NODE_ENV=production BUILD=ssg node scripts/build",
-    "build:server": "cross-env NODE_ENV=production BUILD=server node scripts/build",
-    "build:static": "cross-env NODE_ENV=production BUILD=static node scripts/build",
+    "dev": "cross-env SERVER_DIR=scripts BUILD=ssr node scripts/build",
+    "build:ssr": "cross-env SERVER_DIR=scripts NODE_ENV=production BUILD=ssr node scripts/build",
+    "build:ssg": "cross-env SERVER_DIR=scripts NODE_ENV=production BUILD=ssg node scripts/build",
+    "build:server": "cross-env SERVER_DIR=scripts NODE_ENV=production BUILD=server node scripts/build",
+    "build:static": "cross-env SERVER_DIR=scripts NODE_ENV=production BUILD=static node scripts/build",
     "serve": "node dist/server",
     "test": "jest --watch",
     "prepare": "husky install"

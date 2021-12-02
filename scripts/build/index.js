@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const { config } = require("dotenv");
+config();
 const Vite = require("vite");
 const path = require("path");
 const fs = require("fs-extra");
@@ -26,7 +28,7 @@ const define = {
   "process.env.BUILD": `"${process.env.BUILD}"`,
 };
 
-const devServerPath = Cwd("dist/server-dev/server.js");
+const devServerPath = Cwd("dist/server-dev/index.js");
 
 function copyPackage() {
   const pkg = require(Cwd("package.json"));
@@ -67,6 +69,7 @@ function copyFiles(files = [""]) {
 }
 
 let worker;
+
 async function onBoundleEnd() {
   if (worker) {
     worker.kill(1);
@@ -92,7 +95,7 @@ async function build() {
     } else {
       const list = fs.readdirSync("dist/server");
       list.forEach((file) => {
-        if (file !== "server.js") {
+        if (file !== "index.js") {
           const p = path.resolve("dist/server", file);
           fs.rmSync(p, { force: true, recursive: true });
         }
@@ -116,8 +119,10 @@ async function build() {
       }
 
       copyFiles([".env"]);
-      copyPackage();
-      require("@vercel/ncc")(Cwd("./dist/server/server.js"), {
+      if (process.env.BUILD_PKG) {
+        copyPackage();
+      }
+      require("@vercel/ncc")(Cwd("./dist/server/index.js"), {
         cache: false,
         filterAssetBase: process.cwd(), // default
         minify: true, // default
@@ -127,7 +132,7 @@ async function build() {
         debugLog: false, // default
       }).then(({ code, map, assets }) => {
         fs.writeFileSync(Cwd("./dist/server/index.js"), code);
-        fs.removeSync(Cwd("./dist/server/server.js"));
+        // fs.removeSync(Cwd("./dist/server/server.js"));
       });
     }
 

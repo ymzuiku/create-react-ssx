@@ -23,7 +23,7 @@
   "include": [
     "pages",
     "scripts",
-    "server",
+    "cmd",
     "jest.config.js"
   ]
 }
