@@ -6,7 +6,7 @@
 
 ## Feature
 
-这应该是截止到 2021 年 9 月 1 日，以 React 作为前端的 NodeJS 全栈方案，较为完整的起步工程。改脚手架不捆绑任何第三方库（react 及 react-router 除外）,
+这应该是截止到 2021 年 9 月 1 日，以 React 作为前端的 NodeJS 全栈方案，较为完整的起步工程。该脚手架不捆绑任何第三方库（react 及 react-router 除外）,
 不会擅作主张的为你配置好状态管理等其他任何有妨碍你技术选型的库。
 
 - 开箱 typescript
@@ -260,3 +260,10 @@ npm run install
 
 1. 备份历史的 scripts 文件夹，并且下载新的 scripts 文件夹
 2. 更新 package.json 中和新 create-react-ssx 相关的依赖
+
+## 编译 PKG 运行环境
+
+PKG 需要描述 package.json 文件，我们可以在环境变量中添加 `BUILD_PKG=true` 来编译 package.json 描述文件
+
+
+
