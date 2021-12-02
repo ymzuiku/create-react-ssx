@@ -260,3 +260,10 @@ npm run install
 
 1. 备份历史的 scripts 文件夹，并且下载新的 scripts 文件夹
 2. 更新 package.json 中和新 create-react-ssx 相关的依赖
+
+## 编译 PKG 运行环境
+
+PKG 需要描述 package.json 文件，我们可以在环境变量中添加 `BUILD_PKG=true` 来编译 package.json 描述文件
+
+
+

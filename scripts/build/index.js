@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-const { config } = require("dotenv");
-config();
 const Vite = require("vite");
 const path = require("path");
 const fs = require("fs-extra");
