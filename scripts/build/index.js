@@ -26,7 +26,19 @@ const define = {
   "process.env.BUILD": `"${process.env.BUILD}"`,
 };
 
-const devServerPath = Cwd("dist/server-dev/index.js");
+function getBuildReleaseDir() {
+  return process.env.BUILD_DIR || "dist/server";
+}
+
+function getBuildDevDir() {
+  return process.env.BUILD_DIR || "dist/server-dev";
+}
+
+function getBuildDirIsProd() {
+  return process.env.BUILD_DIR || (isProd ? "dist/server" : "dist/server-dev");
+}
+
+const devServerPath = Cwd(getBuildDevDir() + "/index.js");
 
 function copyPackage() {
   const pkg = require(Cwd("package.json"));
@@ -37,7 +49,7 @@ function copyPackage() {
   delete pkg["prettier"];
 
   fs.writeJSONSync(
-    Cwd("dist/server/package.json"),
+    Cwd(getBuildDevDir() + "/package.json"),
     {
       ...pkg,
       bin: {
@@ -61,7 +73,7 @@ function copyFiles(files = [""]) {
   files.forEach((file) => {
     const p = Cwd(file);
     if (fs.existsSync(p)) {
-      fs.copyFileSync(p, Cwd("dist/server", file));
+      fs.copyFileSync(p, Cwd(getBuildReleaseDir(), file));
     }
   });
 }
@@ -85,17 +97,17 @@ async function build() {
     const watcher = await Vite.build(isProd ? configs.server(define) : configs.serverDev(define));
 
     if (isProd) {
-      const list = fs.readdirSync("dist/server");
+      const list = fs.readdirSync(getBuildReleaseDir());
       list.forEach((file) => {
         if (file !== "index.js") {
-          const p = path.resolve("dist/server", file);
+          const p = path.resolve(getBuildReleaseDir(), file);
           fs.rmSync(p, { force: true, recursive: true });
         }
       });
     }
 
     if (process.env.COPY_DIR) {
-      fs.copySync(Cwd(process.env.COPY_DIR), isProd ? "dist/server" : "dist/server-dev");
+      fs.copySync(Cwd(process.env.COPY_DIR), getBuildDirIsProd());
     }
 
     if (!isProd) {
@@ -116,7 +128,7 @@ async function build() {
 
     if (isBuildServer) {
       if (isSSR || isSSG) {
-        fs.copySync(Cwd("dist/static"), "dist/server/static");
+        fs.copySync(Cwd("dist/static"), getBuildReleaseDir() + "/static");
       }
       if (isSSR) {
         await Vite.build(configs.entryServer(define));
@@ -126,7 +138,7 @@ async function build() {
       if (process.env.BUILD_PKG) {
         copyPackage();
       }
-      require("@vercel/ncc")(Cwd("./dist/server/index.js"), {
+      require("@vercel/ncc")(Cwd(`./${getBuildReleaseDir()}/index.js`), {
         cache: false,
         filterAssetBase: process.cwd(), // default
         minify: true, // default
@@ -135,8 +147,7 @@ async function build() {
         quiet: false, // default
         debugLog: false, // default
       }).then(({ code, map, assets }) => {
-        fs.writeFileSync(Cwd("./dist/server/index.js"), code);
-        // fs.removeSync(Cwd("./dist/server/server.js"));
+        fs.writeFileSync(Cwd(`./${getBuildReleaseDir()}/index.js`), code);
       });
     }
 

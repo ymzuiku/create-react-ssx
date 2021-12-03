@@ -25,7 +25,7 @@ exports.serverDev = (define) =>
         formats: ["cjs"],
         entry: serverIndex,
       },
-      outDir: "dist/server-dev",
+      outDir: process.env.BUILD_DIR || "dist/server-dev",
       emptyOutDir: false,
       watch: {},
     },
@@ -49,8 +49,8 @@ exports.server = (define) =>
         formats: ["cjs"],
         entry: serverIndex,
       },
-      outDir: "dist/server",
-      emptyOutDir: true,
+      outDir: process.env.BUILD_DIR || "dist/server",
+      emptyOutDir: false,
     },
   });
 
@@ -97,8 +97,7 @@ exports.entryServer = (define) =>
         entry: "scripts/build/appServer.tsx",
       },
       emptyOutDir: false,
-      outDir: "dist/cmd",
-      emptyOutDir: false,
+      outDir: process.env.BUILD_DIR || "dist/server",
     },
   });
 
