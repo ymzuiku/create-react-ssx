@@ -232,6 +232,8 @@ tailwind-jit 基本是你无感知的，但是若你更喜欢其他 css 方案�
 1. 创建 server 文件夹，并把 `scripts/index.ts` 文件移动到 `server/index.ts` 中
 2. 修改 添加 env 为 SERVER_DIR，从 `scripts` 修改为 `server`
 
+若有需要拷贝后端文件，可添加环境变量 `COPY_DIR=xxx` 到启动命令中，ssx 会帮你把xxx文件夹下的内容拷贝到运行环境中
+
 ## Deploy
 
 ### 前端

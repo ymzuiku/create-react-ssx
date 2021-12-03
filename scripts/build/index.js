@@ -84,18 +84,24 @@ async function build() {
   if (isBuildServer) {
     const watcher = await Vite.build(isProd ? configs.server(define) : configs.serverDev(define));
 
-    if (!isProd) {
-      watcher.on("event", (event) => {
-        if (event.code === "BUNDLE_END") {
-          onBoundleEnd();
-        }
-      });
-    } else {
+    if (isProd) {
       const list = fs.readdirSync("dist/server");
       list.forEach((file) => {
         if (file !== "index.js") {
           const p = path.resolve("dist/server", file);
           fs.rmSync(p, { force: true, recursive: true });
+        }
+      });
+    }
+
+    if (process.env.COPY_DIR) {
+      fs.copySync(Cwd(process.env.COPY_DIR), isProd ? "dist/server" : "dist/server-dev");
+    }
+
+    if (!isProd) {
+      watcher.on("event", (event) => {
+        if (event.code === "BUNDLE_END") {
+          onBoundleEnd();
         }
       });
     }
