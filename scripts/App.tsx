@@ -1,7 +1,8 @@
-import "./tailwind.css";
-import { routerHooks } from "./routerHelper";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { Root } from "../pages/root";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { routerHooks } from "./routerHelper";
+import { cacheUseHistory } from "./ssxHistory";
+import "./tailwind.css";
 
 export interface AppProps {
   ssr?: boolean;
@@ -24,6 +25,9 @@ function BeforeComponent({ Component, path, ...rest }: { Component: React.FC; pa
 }
 
 export function App({ routes, serverSideProps }: AppProps) {
+  const h = useHistory();
+  Object.assign(cacheUseHistory, h);
+
   return (
     <>
       <Root />

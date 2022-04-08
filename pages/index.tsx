@@ -1,9 +1,9 @@
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
-import { preload } from "../scripts/preload";
+import { useHistory } from "react-router-dom";
+import { ssxHistory } from "../scripts/ssxHistory";
 
 export function Index() {
-  preload("/sub");
+  ssxHistory.preload("/sub");
   const [num, setNum] = useState(0);
   const handleAddNum = () => {
     setNum(num + 1);
@@ -44,15 +44,17 @@ function Cell() {
               <div className="relative">
                 <dt>
                   <div
-                    onClick={() => h.push("/sub?dog=20")}
-                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                    onClick={() => ssxHistory.push("/sub?dog=20")}
+                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white"
+                  >
                     <svg
                       className="h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true">
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -70,14 +72,16 @@ function Cell() {
                 <dt>
                   <div
                     onClick={() => h.push("/sub")}
-                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                    className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white"
+                  >
                     <svg
                       className="h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true">
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -102,7 +106,8 @@ function Cell() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true">
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -127,7 +132,8 @@ function Cell() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      aria-hidden="true">
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

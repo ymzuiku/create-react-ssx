@@ -23,17 +23,17 @@
 ## FQA
 
 - Q: 它和 NextJS 的区别
-    1. 此工程的初衷是全栈项目，它给你一个干净的 NodeJS 后端起点。
-    1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
-    1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
-    1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
-    1. 使用 React-Route 作为路由
-    1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、tailwind-jit、eslint、prettier、pre-commit、jest(esbuild)
-    1. getServerSideProps 兼容 SSR 和 SSG
+  1. 此工程的初衷是全栈项目，它给你一个干净的 NodeJS 后端起点。
+  1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
+  1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
+  1. 更小的后端体积，这在 ServerLess 的场景下会显得更有优势
+  1. 使用 React-Route 作为路由
+  1. 相对于库，工程可以做更多工程化的其他工作, 已经为您设置的所有无聊内容：typescript、tailwind-jit、eslint、prettier、pre-commit、jest(esbuild)
+  1. getServerSideProps 兼容 SSR 和 SSG
 - Q: 为什么 npm run dev 样式会延迟加载？
-    - 开发环境下 tailwind-jit 还未动态编译完
+  - 开发环境下 tailwind-jit 还未动态编译完
 - Q: 为什么会遇到错误: `ReferenceError: window is not defined` 或者 `fetch is not defined`
-    - 雷同于 NextJS，在组件 SSR\SSG 时，请不要在 onMound 生命周期之前访问 window 下的对象
+  - 雷同于 NextJS，在组件 SSR\SSG 时，请不要在 onMound 生命周期之前访问 window 下的对象
 
 ## Getting Started
 
@@ -43,6 +43,15 @@
 
 ```bash
 npx create-react-ssx my-project
+cd my-project
+npm install
+```
+
+如果需要使用 cnpm 代理，可以如此:
+
+```bash
+cnpm i -g create-react-ssx
+create-react-ssx my-project
 cd my-project
 npm install
 ```
@@ -97,7 +106,7 @@ A.有 `export default` 导出 default， 优先使用 `export default`:
 
 ```tsx
 export default function Home() {
-    return <div>Home</div>;
+  return <div>Home</div>;
 }
 ```
 
@@ -105,18 +114,18 @@ B.其次使用首字母大写的 `export` 函数:
 
 ```tsx
 export function Home() {
-    return <div>Home</div>;
+  return <div>Home</div>;
 }
 ```
 
 ```tsx
 // 正确，Props仅是类型对象，不会和页面组件冲突
 export interface Props {
-    title: string;
+  title: string;
 }
 
-export function Home({title}: Props) {
-    return <div>{title}</div>;
+export function Home({ title }: Props) {
+  return <div>{title}</div>;
 }
 ```
 
@@ -129,52 +138,52 @@ SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增
 直接预加载例子：
 
 ```tsx
-import {preload} from "../scripts/preload";
+import { preload } from "../scripts/preload";
 
 export default function Home() {
-    // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
-    // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
-    preload("/sub");
+  // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
+  // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
+  preload("/sub");
 
-    return <div>hello</div>;
+  return <div>hello</div>;
 }
 ```
 
 交互加载例子：
 
 ```tsx
-import {preload} from "../scripts/preload";
+import { preload } from "../scripts/preload";
 
 export default function Home() {
-    const handleLoadSubPage = () => preload("/sub");
+  const handleLoadSubPage = () => preload("/sub");
 
-    return (
-        <div>
-            <button className="bg-gray-200 p-2 m-3" onMouseEnter={handleLoadSubPage} onTouchStart={handleLoadSubPage}>
-                鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
-            </button>
-        </div>
-    );
+  return (
+    <div>
+      <button className="bg-gray-200 p-2 m-3" onMouseEnter={handleLoadSubPage} onTouchStart={handleLoadSubPage}>
+        鼠标移入时加载 /sub 页面的拆分代码，从而减少点击后的页面懒加载开销
+      </button>
+    </div>
+  );
 }
 ```
 
 有规律的加载多个：
 
 ```tsx
-import {preload} from "../scripts/preload";
+import { preload } from "../scripts/preload";
 
 function usePreloads() {
-    // 假定我们需要加载 /a, /b, /c，在这些页面加载完了我们再加载 /big
-    Promise.all([preload("/a"), preload("/b"), preload("/c")]).then(() => {
-        preload("/big");
-    });
+  // 假定我们需要加载 /a, /b, /c，在这些页面加载完了我们再加载 /big
+  Promise.all([preload("/a"), preload("/b"), preload("/c")]).then(() => {
+    preload("/big");
+  });
 }
 
 export default function Home() {
-    // 预加载多个页面
-    usePreloads();
+  // 预加载多个页面
+  usePreloads();
 
-    return <div>hello</div>;
+  return <div>hello</div>;
 }
 ```
 
@@ -190,14 +199,14 @@ export default function Home() {
 若需要在 route 切换时，进行一些事件和重定向，请在 root.tsx 中使用 routerHooks.before:
 
 ```tsx
-import {routerHooks} from "../scripts/routerHelper";
+import { routerHooks } from "../scripts/routerHelper";
 
 // 若返回字符串不为空，则重定向到指定字符串
 routerHooks.before = (path) => {
-    if (path === "/os" && localStorage.getItem("token")) {
-        return "/os/pay";
-    }
-    return "";
+  if (path === "/os" && localStorage.getItem("token")) {
+    return "/os/pay";
+  }
+  return "";
 };
 ```
 
@@ -211,8 +220,8 @@ routerHooks.before = (path) => {
 
 ```tsx
 export const getServerSideProps = async (req: GetServerSideRequire) => {
-    await new Promise((res) => setTimeout(res, 100));
-    return {str: "user", dog: req.query.dog, query2: req.query};
+  await new Promise((res) => setTimeout(res, 100));
+  return { str: "user", dog: req.query.dog, query2: req.query };
 };
 ```
 
@@ -231,9 +240,8 @@ tailwind-jit 基本是你无感知的，但是若你更喜欢其他 css 方案�
 
 1. 创建 server 文件夹，并把 `scripts/index.ts` 文件移动到 `server/index.ts` 中
 2. 修改 添加 env 为 SERVER_DIR，从 `scripts` 修改为 `server`
-3. 若有需要拷贝后端文件，可添加环境变量 `COPY_DIR=xxx` 到启动命令中，ssx 会帮你把xxx文件夹下的内容拷贝到运行环境中
+3. 若有需要拷贝后端文件，可添加环境变量 `COPY_DIR=xxx` 到启动命令中，ssx 会帮你把 xxx 文件夹下的内容拷贝到运行环境中
 4. 若有微服务需求，我们往往需要编译不同的输出路径，可以添加 `COPY_DIR=dist/server-a` 到启动命令中
-
 
 ## Deploy
 
@@ -267,6 +275,3 @@ npm run install
 ## 编译 PKG 运行环境
 
 PKG 需要描述 package.json 文件，我们可以在环境变量中添加 `BUILD_PKG=true` 来编译 package.json 描述文件
-
-
-

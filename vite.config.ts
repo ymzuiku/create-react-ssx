@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
 import legacy from "@vitejs/plugin-legacy";
+import { defineConfig } from "vite";
 
 const isProd = process.env.NODE_ENV === "production";
 

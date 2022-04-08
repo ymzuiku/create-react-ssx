@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { ssxHistory } from "../../scripts/ssxHistory";
 import { Other } from "./other";
 
 export interface Props {
@@ -18,9 +18,9 @@ export const world = () => {
 };
 
 export function Sub({ title }: Props) {
-  const h = useHistory();
+  // const h = useHistory();
   const handlePushDetail = () => {
-    h.push("/sub/detailPage");
+    ssxHistory.push("/sub/detailPage");
   };
   return (
     <div>
