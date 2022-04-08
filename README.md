@@ -133,17 +133,17 @@ export function Home({ title }: Props) {
 
 SSG/SSR 预渲染配合路由懒加载虽然减少了首屏时间，但是也增加了切换页面的时间，有时候我们知道用户接下来会去到哪些页面，我们可以提前加载页面代码资源。
 
-组件 `scripts/preload` 提供了页面预加载的方法，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`preload("/sub")` 即加载 /sub 页面的代码
+组件 `scripts/ssxHistory` 提供了页面预加载的方法，我们只需要执行相关页面的 preload 方法即可提前加载页面资源，如：`ssxHistory.preload("/sub")` 即加载 /sub 页面的代码
 
 直接预加载例子：
 
 ```tsx
-import { preload } from "../scripts/preload";
+import { ssxHistory } from "../scripts/ssxHistory";
 
 export default function Home() {
   // preload会安全的仅在浏览器中生效，不会在 SSR 中执行, 并且每个路由仅会执行一次
   // 若你需要在一进入页面就自动预加载某个页面，也可直接写在组件中
-  preload("/sub");
+  ssxHistory.preload("/sub");
 
   return <div>hello</div>;
 }
@@ -152,10 +152,10 @@ export default function Home() {
 交互加载例子：
 
 ```tsx
-import { preload } from "../scripts/preload";
+import { ssxHistory } from "../scripts/ssxHistory";
 
 export default function Home() {
-  const handleLoadSubPage = () => preload("/sub");
+  const handleLoadSubPage = () => ssxHistory.preload("/sub");
 
   return (
     <div>
@@ -170,12 +170,12 @@ export default function Home() {
 有规律的加载多个：
 
 ```tsx
-import { preload } from "../scripts/preload";
+import { ssxHistory } from "../scripts/ssxHistory";
 
 function usePreloads() {
   // 假定我们需要加载 /a, /b, /c，在这些页面加载完了我们再加载 /big
-  Promise.all([preload("/a"), preload("/b"), preload("/c")]).then(() => {
-    preload("/big");
+  Promise.all([ssxHistory.preload("/a"), ssxHistory.preload("/b"), pssxHistory.reload("/c")]).then(() => {
+    ssxHistory.preload("/big");
   });
 }
 
