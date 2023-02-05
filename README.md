@@ -23,6 +23,7 @@
 ## FQA
 
 - Q: 它和 NextJS 的区别
+  1. NextJS 默认使用 webpack, 而此项目使用 Vite, 可以利用 bundleless 的特性提高大工程的热更新性能 (2023年更新: NextJS v13 有了 trubpack, 拥有了和 Vite 雷同的编译性能)
   1. 此工程的初衷是全栈项目，它给你一个干净的 NodeJS 后端起点。
   1. 相对于已经封装好的 NextJS，这仅仅是一个起步工程，好处是你可以在此基础上自定义任何苛刻的需求
   1. 若你更喜欢用 SSG，那么此工程编译的后端不会带有任何 SSR/SSG 的代码块，和一个传统 NodeJS 后端一致
@@ -44,7 +45,7 @@
 ```bash
 npx create-react-ssx my-project
 cd my-project
-npm install
+yarn install
 ```
 
 如果需要使用 cnpm 代理，可以如此:
@@ -53,7 +54,7 @@ npm install
 cnpm i -g create-react-ssx
 create-react-ssx my-project
 cd my-project
-npm install
+yarn install
 ```
 
 ### Script
